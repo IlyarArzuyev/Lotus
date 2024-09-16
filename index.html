@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Авторизация</title>
+  <style>
+    /* Стили для красивого оформления формы входа */
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e3a5f; /* Темно-синий фон */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background-color: #2b4d78; /* Более светлый синий для контейнера */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      color: #ffffff;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 24px;
+      color: #ff8c00; /* Оранжевый цвет заголовка */
+    }
+
+    .login-container img {
+      display: block;
+      margin: 0 auto 20px auto; /* Центрируем изображение и добавляем отступы */
+      width: 240px;
+      height: 40px;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ff8c00; /* Оранжевый цвет границы */
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #ffffff;
+      color: #333333;
+      box-sizing: border-box;
+    }
+
+    .login-container input:focus {
+      outline: none;
+      border-color: #ffb347; /* Более светлый оранжевый при фокусе */
+      box-shadow: 0 0 8px rgba(255, 140, 0, 0.5);
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff8c00; /* Оранжевый фон */
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-container button:hover {
+      background-color: #ffb347; /* Более светлый оранжевый при наведении */
+    }
+
+    .error-message {
+      color: #ff6347; /* Красный цвет ошибки */
+      text-align: center;
+      display: none;
+      margin-top: 10px;
+    }
+
+    /* Анимация при наведении на кнопку */
+    .login-container button:hover {
+      background-color: #ff7f50; /* Еще более светлый оранжевый */
+      box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
+    }
+
+    /* Медиазапрос для мобильных устройств */
+    @media (max-width: 480px) {
+      .login-container {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .login-container h2 {
+        font-size: 20px;
+      }
+
+      .login-container input,
+      .login-container button {
+        font-size: 14px;
+      }
+
+      .login-container img {
+        width: 200px;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Вход в систему</h2>
+    <img src="logo-default-480x80.png">
+    <input type="text" id="username" placeholder="Логин">
+    <input type="password" id="password" placeholder="Пароль">
+    <button onclick="login()">Войти</button>
+    <p id="error-message" class="error-message">Неверный логин или пароль</p>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const validUsername = "admin";  // Логин
+      const validPassword = "Expert1234";   // Пароль
+
+      if (username === validUsername && password === validPassword) {
+        // Сохранение статуса входа в sessionStorage
+        sessionStorage.setItem('isLoggedIn', 'true');
+        // Перенаправление на первую страницу после входа
+        window.location.href = "main.html";
+      } else {
+        document.getElementById('error-message').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница с Кредитным Калькулятором</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f9f9;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+ margin: 0; /* Убедитесь, что нет внешних отступов */
+    padding: 0; /* Убедитесь, что нет внутренних отступов */
+        }
+
+      /* Левая часть */
+.left {
+    flex: 2;
+    background-color: #E6E6FA;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Выравнивание по левому краю по горизонтали */
+    justify-content: flex-start; /* Выравнивание по верхнему краю по вертикали */
+    border-radius: 10px; /* Скругленные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень вокруг блока */
+    margin: 20px; /* Отступы вокруг блока */
+}
+
+/* Заголовок h1 */
+.left h1 {
+    width: 100%; /* Установите ширину на 100% контейнера */
+    text-align: center; /* Выравнивание текста по центру */
+    margin-bottom: 20px;
+    font-size: 36px;
+    color: #00008B;
+}
+
+        /* Правая часть */
+.right {
+    flex: 0.9; /* Уменьшаем на 10% */
+    background-color: #FFEFD5;
+    padding: 40px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Тень вокруг блока */
+    border-radius: 10px; /* Скругленные углы */
+    margin: 20px; /* Отступы вокруг блока */
+}
+
+/* Заголовок h2 */
+.right h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #00008B;
+    text-align: center; /* Выравнивание текста по центру */
+}
+
+        /* Стиль для ссылок */
+        .right .link-box {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .right .link-box:hover {
+            transform: translateX(10px);
+            background-color: #f1f3f4;
+        }
+
+        .right .link-box a {
+            text-decoration: none;
+            color: #00008B;
+            font-size: 18px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .right .link-box a:hover {
+            color: #e86c28;
+        }
+
+        /* Стили для кредитного калькулятора */
+        .calculator {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f1f3f4;
+            border: 1px solid #ddd;
+        }
+
+        .calculator input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .calculator label {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .calculator button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff7f31;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .calculator button:hover {
+            background-color: #e86c28;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Левая часть -->
+   <div class="left">
+    <h1>Добро пожаловать на наш сайт!</h1>
+    <p>Мы предлагаем профессиональные консультации по ипотечному кредитованию и залоговым кредитам. Наша команда опытных специалистов готова помочь вам выбрать наилучшее решение, учитывая ваши финансовые возможности и потребности.</p>
+    <p>Мы предоставляем широкий спектр услуг, включая:</p>
+    <ul>   <br>  
+        <li>Анализ вашего финансового положения для выбора оптимального кредита</li>
+        <li>Подбор лучших предложений от банков и кредитных организаций</li>
+        <li>Помощь в подготовке и оформлении документов</li>
+        <li>Консультирование по вопросам ипотечного страхования</li>
+           <br>
+    </ul>
+    <p>Наши эксперты готовы ответить на все ваши вопросы и помочь в процессе получения кредита. Обращайтесь к нам, и мы сделаем все возможное, чтобы сделать процесс простым и удобным для вас.</p>
+    <p>Свяжитесь с нами через контактные формы на сайте или по телефону, указанному ниже. Мы всегда рады помочь!</p>
+</div>
+    <!-- Правая часть -->
+    <div class="right">
+        <h2 align="center">Полезные ссылки</h2>
+        <div class="link-box"><a href="#">Ссылка 1</a></div>
+        <div class="link-box"><a href="#">Ссылка 2</a></div>
+        <div class="link-box"><a href="#">Ссылка 3</a></div>
+        <div class="link-box"><a href="#">Ссылка 4</a></div>
+        <div class="link-box"><a href="#">Ссылка 5</a></div>
+        <div class="link-box"><a href="#">Ссылка 6</a></div>
+        <div class="link-box"><a href="#">Ссылка 7</a></div>
+        <div class="link-box"><a href="#">Ссылка 8</a></div>
+        <div class="link-box"><a href="#">Ссылка 9</a></div>
+        <div class="link-box"><a href="#">Ссылка 10</a></div>
+
+        <!-- Кредитный калькулятор -->
+       <div class="calculator">
+            <h2>Кредитный калькулятор</h2>
+            <label for="amount">Сумма кредита (тг):</label>
+            <input type="text" id="amount" placeholder="Введите сумму кредита" oninput="formatNumber(this)">
+
+            <label for="term">Срок кредита (в месяцах):</label>
+            <input type="text" id="term" placeholder="Введите срок кредита" oninput="formatNumber(this)">
+
+            <label for="rate">Процентная ставка (% годовых):</label>
+            <input type="text" id="rate" placeholder="Введите процентную ставку" oninput="formatNumber(this)">
+
+            <button onclick="calculateCredit()">Рассчитать</button>
+
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Функция форматирования чисел
+    function formatNumber(input) {
+        let value = input.value.replace(/\s+/g, ''); // Удаляем пробелы
+        if (value) {
+            value = Number(value).toLocaleString('ru-RU'); // Форматируем число с пробелами
+            input.value = value;
+        }
+    }
+
+    function calculateCredit() {
+        // Получаем значения полей ввода и убираем пробелы
+        const amount = document.getElementById('amount').value.replace(/\s+/g, '');
+        const term = document.getElementById('term').value.replace(/\s+/g, '');
+        const rate = document.getElementById('rate').value.replace(/\s+/g, '');
+
+        // Проверяем, что все поля заполнены
+        if (amount && term && rate) {
+            const principal = parseFloat(amount);
+            const months = parseInt(term);
+            const annualRate = parseFloat(rate);
+
+            const monthlyRate = (annualRate / 100) / 12; // Месячная процентная ставка
+            const monthlyPayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months)); // Формула аннуитетного платежа
+            const totalPayment = monthlyPayment * months; // Общая сумма выплат
+            const overpayment = totalPayment - principal; // Сумма переплаты
+
+            // Выводим результат
+            document.getElementById('result').innerHTML = `
+                <p>Ежемесячный платеж: ${monthlyPayment.toLocaleString('ru-RU')} тг.</p>
+                <p>Сумма переплаты: ${overpayment.toLocaleString('ru-RU')} тг.</p>
+                <p>Общая сумма выплат: ${totalPayment.toLocaleString('ru-RU')} тг.</p>
+            `;
+        } else {
+            document.getElementById('result').innerHTML = "<p>Пожалуйста, заполните все поля.</p>";
+        }
+    }
+</script>
+
+</body>
+</html>
+
+</body>
+</html>

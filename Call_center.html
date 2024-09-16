@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница с Кредитным Калькулятором</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .top-container {
+            display: flex;
+            flex: 1;
+            margin: 20px;
+        }
+
+        .left {
+            flex: 2;
+            background-color: #E6E6FA;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-right: 20px;
+        }
+
+        .left h1 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px;
+            color: #00008B;
+        }
+
+        .grid-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .grid-table th, .grid-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left; /* Выравнивание по правому краю */
+        }
+
+        .grid-table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Присваивание цвета каждой строке */
+ .grid-table tr:nth-child(1) {
+            background-color: #E0FFFF; /* Светло-красный */
+  }
+        .grid-table tr:nth-child(2) {
+            background-color: #F0E68C; /* Светло-красный */
+        }
+        .grid-table tr:nth-child(3) {
+            background-color: #F0E68C; /* Светло-зелёный */
+        }
+        .grid-table tr:nth-child(4) {
+            background-color: #8FBC8F; /* Светло-синий */
+        }
+        .grid-table tr:nth-child(5) {
+            background-color: #8FBC8F; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(6) {
+            background-color: #AFEEEE; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(7) {
+            background-color: #AFEEEE; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(8) {
+            background-color: #AFEEEE; /* Светло-жёлтый */
+        }
+
+
+.grid-table tr:nth-child(9) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(10) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(11) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+.grid-table tr:nth-child(12) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(13) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(14) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+.grid-table tr:nth-child(15) {
+            background-color: #FFB6C1; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(16) {
+            background-color: #98FB98; /* Светло-жёлтый */
+        }
+
+
+        .bottom-container {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .right {
+            background-color: #FFEFD5;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .calculator {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f1f3f4;
+            border: 1px solid #ddd;
+        }
+
+        .calculator input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .calculator label {
+            font-size: 16px;
+            color: #333;
+        }
+
+.bottom-container {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+.bank-info, .links-container {
+            margin: 20px 0;
+        }
+
+        .bank-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .bank-info .info-block {
+            flex: 1;
+            min-width: 200px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00BFFF;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 3mm;
+        }
+
+        .calculator button:hover {
+            background-color: #1e90ff;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+.links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .links-container a {
+            padding: 10px 20px;
+            background-color: #00BFFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .links-container a:hover {
+            background-color: #1e90ff;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-container">
+    <div class="left">
+        <h1>Скрипты отдела продаж</h1>
+        <!-- Таблица с ячейками разных цветов -->
+        <table class="grid-table">
+            <thead>
+                <tr>
+                    <th class="narrow">Блок</th>
+                    <th class="narrow">Тип</th>
+                    <th>Что говорим</th>
+                    <th>Комментарии</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Установление контакта</td>
+                    <td>Приветствие</td>
+                    <td>Добрый (утро\день\вечер) Имя Клиента! (Пауза 1-2 сек)<br>
+                      -Да, кто это?<br>
+                      Меня зовут …,представляю компанию Expert Credit. Мы специализируемся на оформлении ипотек и решении различных вопросов, связанных с покупкой жилья. Вы оставили у нас заявку по ипотеке (пауза 1-2 сек)<br>
+
+</td>
+                    <td>1) Поддерживние "живого диалога" во время всего звонка   <br>      
+2) Уверенная речь (нельзя представляться как “это Салтанат я с ипотеки”)<br>
+3) улыбка в голосе<br>
+</td>
+                </tr>
+                <tr>
+                    <td rowspan="2" class="yellow-bg green-border">Программирование</td>
+                    <td class="yellow-bg green-border">Успокаиваем клиента</td>
+                    <td class="yellow-bg green-border">(отвечаем на вопрос клиента, если сразу задан вопрос) — приблизительно/ориентировочно.</td>
+                    <td class="yellow-bg green-border">
+                        1) При вопросе клиента про стоимость нужно обязательно ответить на него "сейчас расскажу вам про стоимость услуг, могу для начала уточнить у вас пару вопросов?", а не пытаться "уплыть" в вводных словах.<br>
+                        2) Цену называем "вилкой": как самую низкую, чтобы зацепить.<br>
+                        3) Объясняем, что цена меняется от разных факторов, и чтобы посчитать его конкретный случай, нам обязательно нужно проконсультироваться у экспертов.<br>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="yellow-bg green-border">Программирование</td>
+                    <td class="yellow-bg green-border">Имя клиента, давайте чтобы не тратить ваше драгоценное время, я задам буквально несколько важных вопросов, после чего расскажу уже, чем мы можем быть полезны, договорились?</td>
+                    <td class="yellow-bg green-border">
+                        Еще пример ответа: "Стоимость консультации составляет 20.000 тг, у нас много опытных экспертов, которые смогут дать вам решение по вашей ситуации. Чтобы более подробно все узнать или как пройти консультацию онлайн/офлайн, разрешите задать несколько уточняющих вопросов. Хорошо?"
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td rowspan="2" class="yellow-bg green-border">Квалификация и Выявление потребности</td>
+                    <td class="yellow-bg green-border">Квалификация</td>
+                    <td class="yellow-bg green-border">Супер, подскажите пожалуйста вы на себя планируете взять ипотеку? 
+- Отлично, сколько вам лет?
+- Ранее получали консультацию по ипотеке?
+- У вас определенный вопрос по ипотеке или вам нужна общая консультация?                                                                                                           - (Как только мы ознакомились с ситуацией клиента,если он целевой мы то)    - Имя клиента, смотрите мы можем вам дать несколько вариантов решения вашей ситуации/мы можем предложить вам выгодные программы отталкиваясь от ваших возможностей. Давайте запишу вас к экспертам на консультацию? (ДА). Супер! А когда вам было бы удобно?)</td>
+                    <td class="yellow-bg green-border">
+                        С кем мы работаем?- Мы работаем со всеми,кроме ПЕНСИОНЕРОВ,ЧЕРНЫЙ СПИСОК ИЛИ ДЕЙСТВУЮЩАЯ ПРОСРОЧКА,НЕГАТИВНЫЕ КЛИЕНТЫМАМЫ В ДЕКРЕТЕ                                                                     Во всех этих вариантах мы уточняем "- Есть ли возможность оформления ипотеки на другого человека?"
+                    </td>
+                </tr>
+                <tr>
+                    <td class="yellow-bg green-border">Если не понятно откуда клиент обратился?</td>
+                    <td class="yellow-bg green-border">Откуда вы узнали о нас? Нас порекомендовали или увидели в инстаграм? </td>
+                    <td class="yellow-bg green-border">
+                        
+                    </td>
+                </tr>
+
+ <tr>
+            <td rowspan="3" class="blue-bg green-border">Презентация</td>
+            <td class="blue-bg green-border">Присоединение</td>
+            <td class="blue-bg green-border">
+                Имя клиента, описываем его ситуацию в кратце и делаем презентацию с любовью и восхищением о продукте. Главное улыбка и убежденность, что клиент нас слушает.
+            </td>
+            <td class="blue-bg green-border">
+                1) Презентация должна быть точной и целеустремленной, не нужно "размазывать" <br>
+                2) Клиент должен знать, что для него в этом выгода <br>
+                3) Используем фразы "вы в выгоде", "все получите и будете довольны"
+            </td>
+        </tr>
+        <tr>
+            <td class="blue-bg green-border">Продажа встречи</td>
+            <td class="blue-bg green-border">
+                Имя клиента, предлагаю вам приехать в офис (оговорим адрес), где мы сможем разобрать вашу ситуацию и предложить вам персональное решение. 
+            </td>
+            <td class="blue-bg green-border">
+                1) Эффект от звонка длится 24 часа <br>
+                2) Закрытие на встречу важнее всего для достижения результата
+            </td>
+        </tr>
+        <tr>
+           
+            <td class="blue-bg green-border">Закрытие на встречу</td>
+            <td class="blue-bg green-border">
+                Отлично, тогда подберем удобное время! У нас есть 2 окна (ближайшее время). Как вам удобнее?
+            </td>
+            <td class="blue-bg green-border">
+                Берем предоплату 2000 тг. Отправляем адрес, задачу поставим на встречу.
+            </td>
+        </tr>
+
+
+
+
+
+<tr>
+            <td rowspan="6" class="blue-bg green-border">Отработка возражений</td>
+            <td class="blue-bg green-border">Не оставлял заявку</td>
+            <td class="blue-bg green-border">Очень странно, потому что прежде чем оставить заявку, нужно нажать кнопку и отправить сообщение, возможно вы просто забыли (сказать точное время когда она оставила заявку и ее данные с анкеты), уделите пожалуйста пару минут и я вам более подробно расскажу о нас, уверен буду очень интересно,так как каждый планирует взять свое жилье.</td>
+            <td rowspan="2" class="blue-bg green-border">Используем систему сэндвича при ОС, почувствуйте, где надо по эмоции ответить клиенту, где наоборот, дожимать и манипулировать </td>
+        </tr>
+        <tr>
+            <td class="blue-bg green-border">Если клиент настойчиво просит цены</td>
+            <td class="blue-bg green-border">Имя клиента, у меня к вам один простой вопрос, вы решение принимаете по цене или вам важен результат? </td>
+          
+        </tr>
+        <tr>
+            <td class="blue-bg green-border">ДОРОГО 20-35тыс.</td>
+            <td class="blue-bg green-border">1. Смотрите, сразу скажу мы дороже чем какая либо компания на рынке, но мы знаем за что мы берем деньги, и люди, которые нам платят, получают результат,решение и полезную информацию,лайфхаки как минимум, поэтому я предлагаю вам ... (закрытие на кэв) / или дать время подумать<br><br>      
+2. мы как раз занимаемся вопросами ипотеки без первоначального взноса и без подтверждения дохода. Также мы даем самые низкие % годовые ставки.
+Поэтому консультация платная
+И на самом деле выгодно потратить 20000 тг и знать выгодные программы,решение ситуации разных сложности где банк отказывает в помощи
+Ведь ипотека это серьезно и есть вероятность что вы можете переплатить 5-7 млн
+Думая что экономите</td>
+            <td class="blue-bg green-border">3.Возможно дорого,но наша консультация отличается от банка и мы даем на самом деле выгодные информации для вас и решение в нескольких вопросах Многие наши клиенты бывали на бесплатных консультациях,но помощи в приобретении ипотеки и своего жилья не получили.  <br><br>                                                 
+4.Да понимаю вас,возможно дорого. Но мы облегчаем жизнь нашим клиентам. Есть такая фраза-Что у миллиардеров 100 часов в сутках.
+Вы за эти деньги покупаете дополнительные часы. То есть,вы можете ходить в разные банки,получать разные информации,простоять в очередях и искать решение на бесплатных консультациях. И возможно все равно принцип действий будет не правильно и возьмете ипотеку под бешеные %. Но вы потратите на это самое дорогое что у вас есть,ВРЕМЯ. Оплачивая нам вы покупаете минимум 1-2 года вашей жизни,потому что мы можем дать вам решение.
+Скажите,на самом деле вы сейчас экономите?</td>
+         
+        </tr>
+ <tr>
+            <td class="blue-bg green-border">Я схожу на беспл консультации </td>
+            <td colspan="2" class="blue-bg green-border">Я вас понимаю, потому что я сама тоже ходила на беспл консультации. Вы посещали хотя 1 такую консультацию?
+Еще пожалуйста учитывайте что нужно чтобы купить квартиру в ипотеку? Наличие первоначального взноса, подтверждения дохода, сходить во все банки, выбрать ипотечную программу, искать квартиру которая будет отвечать требованиям банка, заказать оценку, постараться не получить отказ от банка, заключить договор купли-продажи, сдать документы в банк для того чтобы оформили договор банковского займа и вовремя рассчитаться с продавцом квартиры. Либо Вы можете довериться нам и мы расскажем вам как всё это быстрее, безопаснее и выгоднее сделать
+Вы в первую очередь оплачиваете не за услуги,за комфорт и время. За успешность результата и правильную подготовку для получения своего заветного жилья</td>
+            
+            
+        </tr>
+ <tr>
+            <td class="blue-bg green-border">Пропала потребность,уже не актуально</td>
+            <td colspan="2" class="blue-bg green-border">Имя клиента, могу узнать причину? Для нас важно чтобы мы стали лучше. 
+
+На самом деле у нас нет задачи продать вам,просто мы хотим быть полезными для вас. Может у вас все же есть вопросы связанные с ипотекой?                                                                                                           Вопрос ипотеки возможно позже будет для вас актуален! Не теряйте нас
+https://www.instagram.com/kanat_expert?igsh=NXJ2a2RhbGV4dDc3
+В видео на ютубе много полезной информации про ипотеку и банки
+https://youtu.be/AyUpzjtdoRc?si=JyluUUpfhKcAkpL3
+Если появятся вопросы,напишите?!     </td>
+           
+           
+        </tr>
+ <tr>
+            <td class="blue-bg green-border">Я подумаю</td>
+            <td colspan="2" class="blue-bg green-border">Да конечно,ипотека это очень серьезный шаг. По опыту знаю что когда говорят Подумаю,есть у клиента сомнение или не доверие Подскажите,пожалуйста что вам мешает принять решение сейчас?</td>
+           
+          
+        </tr>
+
+<tr>
+            <td class="blue-bg green-border">Предоплата</td>
+            <td class="blue-bg green-border"></td>
+            <td class="blue-bg green-border">Имя клиента, часто сталкиваемся с таким, что клиент может отказаться прям перед консультацией,поэтому мы ведем записи по предоплате 2000 тнг. Это в целях экономии вашего и нашего времени и я уверяю вас, что вам все понравится, подскажите могу отправить счет на каспи 2000 тнг?</td>
+            <td class="blue-bg green-border"></td>
+        </tr>
+<tr>
+            <td class="blue-bg green-border">Закрытие</td>
+            <td class="blue-bg green-border">Укрепление</td>
+            <td class="blue-bg green-border">Тогда бронирую за вами время, за день мы вам напомним. 
+Если у вас поменяются планы,сообщите пожалуйста
+Ждем вас на консультации </td>
+            <td class="blue-bg green-border"></td>
+        </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div class="bottom-container">
+    <!-- Блок с информацией о банках -->
+    <div class="bank-info">
+        <div class="info-block">
+            <h3>Банк 1</h3>
+            <p>Информация о банке 1</p>
+        </div>
+        <div class="info-block">
+            <h3>Банк 2</h3>
+            <p>Информация о банке 2</p>
+        </div>
+        <div class="info-block">
+            <h3>Банк 3</h3>
+            <p>Информация о банке 3</p>
+        </div>
+        <div class="info-block">
+            <h3>Банк 4</h3>
+            <p>Информация о банке 4</p>
+        </div>
+    </div>
+
+
+<!-- Блок со ссылками -->
+    <div class="links-container">
+        <a href="#">Ссылка 1</a>
+        <a href="#">Ссылка 2</a>
+        <a href="#">Ссылка 3</a>
+        <a href="#">Ссылка 4</a>
+        <a href="#">Ссылка 5</a>
+        <a href="#">Ссылка 6</a>
+        <a href="#">Ссылка 7</a>
+        <a href="#">Ссылка 8</a>
+ 
+<div class="links-container">
+        <a href="#">Ссылка 9</a>
+        <a href="#">Ссылка 10</a>
+        <a href="#">Ссылка 11</a>
+        <a href="#">Ссылка 12</a>
+        <a href="#">Ссылка 13</a>
+        <a href="#">Ссылка 14</a>
+        <a href="#">Ссылка 15</a>
+        <a href="#">Ссылка 16</a>
+    </div>
+</div>
+
+
+<div class="bottom-container">
+    <div class="right">
+        <h2>Кредитный Калькулятор</h2>
+        <div class="calculator">
+            <form id="calculatorForm">
+                <label for="loanAmount">Сумма кредита:</label>
+                <input type="text" id="loanAmount" name="loanAmount" placeholder="Введите сумму">
+
+                <label for="interestRate">Процентная ставка:</label>
+                <input type="text" id="interestRate" name="interestRate" placeholder="Введите ставку">
+
+                <label for="loanTerm">Срок кредита (в месяцах):</label>
+                <input type="text" id="loanTerm" name="loanTerm" placeholder="Введите срок">
+
+                <button type="button" onclick="calculateLoan()">Рассчитать</button>
+
+                <div class="result" id="result"></div>
+            </form>
+        </div>
+    </div>
+</div>
+  <script>
+    // Проверка статуса входа
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      // Если пользователь не вошел в систему, перенаправить на страницу входа
+      window.location.href = "index.html";
+    }
+  </script>
+
+<script>
+    // Функция для форматирования чисел с пробелами
+    function formatNumberWithSpaces(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    // Функция расчета кредита
+    function calculateLoan() {
+        const loanAmountInput = document.getElementById('loanAmount');
+        const interestRateInput = document.getElementById('interestRate');
+        const loanTermInput = document.getElementById('loanTerm');
+        const resultDiv = document.getElementById('result');
+
+        // Получаем и форматируем значения
+        let loanAmount = parseFloat(loanAmountInput.value.replace(/\s+/g, ''));
+        let interestRate = parseFloat(interestRateInput.value.replace(',', '.'));
+        let loanTerm = parseInt(loanTermInput.value.replace(/\s+/g, ''));
+
+        if (!isNaN(loanAmount) && !isNaN(interestRate) && !isNaN(loanTerm)) {
+            let monthlyInterestRate = interestRate / 100 / 12;
+            let monthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTerm)) / (Math.pow(1 + monthlyInterestRate, loanTerm) - 1);
+            let totalPayment = monthlyPayment * loanTerm;
+            let overpayment = totalPayment - loanAmount;
+
+            // Отображение результата с форматированием
+            resultDiv.innerHTML = `
+                <p>Ежемесячный платёж: ${formatNumberWithSpaces(monthlyPayment.toFixed(2))} тг.</p>
+                <p>Переплата: ${formatNumberWithSpaces(overpayment.toFixed(2))} тг.</p>
+                <p>Общая сумма выплат: ${formatNumberWithSpaces(totalPayment.toFixed(2))} тг.</p>
+            `;
+        } else {
+            resultDiv.innerHTML = `<p style="color: red;">Пожалуйста, введите корректные данные.</p>`;
+        }
+    }
+
+    // Форматирование ввода с пробелами
+    document.getElementById('loanAmount').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\s+/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        e.target.value = value;
+    });
+
+    document.getElementById('loanTerm').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\s+/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        e.target.value = value;
+    });
+</script>
+<script>
+    // Проверка статуса входа
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      // Если пользователь не вошел в систему, перенаправить на страницу входа
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
