@@ -4,41 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Сайт с анимацией фона</title>
+  <!-- Подключаем шрифт Roboto для Material-стиля -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #FF4500;
+      --primary-light: #FF6347;
+      --secondary-color: #ffffff;
+      --background-overlay-color: rgba(119, 136, 153, 0.7); /* полупрозрачный для glassmorphism */
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --ripple-color: rgba(255, 255, 255, 0.3);
+      --tooltip-bg: rgba(0, 0, 0, 0.7);
+      --tooltip-color: #fff;
+    }
+
     body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      font-family: Arial, sans-serif;
-      background-color: #FAF0E6; /* Общий фон */
-      font-size: 16px; /* Основной размер шрифта */
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #FAF0E6 0%, #FFEBCD 100%);
+      font-size: 16px;
+      perspective: 1500px;
+      transform-style: preserve-3d;
+      position: relative;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23FF4500" d="M448 0c-17.67 0-32 14.33-32 32v96H304C283.8 128 268.8 142.1 268.8 162.3l-3.3 95.8c0 2.3 .4 4.6 1.1 6.8l28.9 95.8c4.4 14.6 17.4 25.9 33.6 25.9H416c17.67 0 32 14.33 32 32v96c0 17.67-14.33 32-32 32H304c-53.02 0-96-42.98-96-96V288H96c-53.02 0-96-42.98-96-96V128c0-53.02 42.98-96 96-96h352c17.67 0 32-14.33 32-32S465.7 0 448 0z"/></svg>') 16 16, auto;
     }
 
-    .header {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: none;
-      color: #FFFFFF;
-      padding: 10px 20px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-      font-weight: bold;
-      z-index: 1;
-      user-select: none;
-    }
-
-    .header img {
-      width: 350px; /* Ширина картинки, измените по необходимости */
-      height: 60px; /* Высота картинки, измените по необходимости */
-      margin-right: 10px;
-      pointer-events: none; /* Отключение возможности взаимодействия с изображением */
-      user-select: none; /* Отключение возможности выделения изображения */
-    }
-
+    /* Контейнер фоновых анимаций */
     #background {
       position: absolute;
       top: 0;
@@ -47,89 +40,183 @@
       height: 100%;
       z-index: 0;
       overflow: hidden;
+      transform-style: preserve-3d;
     }
 
-    /* Волны */
-    .wave {
+    /* Дополнительный градиентный слой с анимацией параллакса */
+    #background::after {
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(to right, rgba(255, 255, 255, 0.1) 25%, rgba(0, 0, 0, 0) 75%);
-      animation: wave-animation 30s linear infinite;
-      transform: rotate(30deg);
-      z-index: -1;
+      width: 120%;
+      height: 120%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
+      animation: parallax 60s ease-in-out infinite alternate;
+      transform: translateZ(-300px);
+      z-index: -2;
+    }
+    @keyframes parallax {
+      from { transform: translate(0, 0) translateZ(-300px); }
+      to { transform: translate(-50px, -50px) translateZ(-300px); }
     }
 
-    @keyframes wave-animation {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 100% 100%;
-      }
+    /* Canvas для фона */
+    #constellation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: transparent;
+    }
+
+    .header {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(100px);
+      background-color: transparent;
+      color: var(--secondary-color);
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 3;
+      user-select: none;
+      box-shadow: 0 8px 16px var(--shadow-color);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .header:hover {
+      transform: translateX(-50%) translateZ(140px) rotateX(5deg);
+    }
+    .header img {
+      width: 350px;
+      height: 60px;
+      margin-right: 10px;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 4px 6px var(--shadow-color));
+      transition: filter 0.3s ease;
+    }
+    .header img:hover {
+      filter: drop-shadow(0 6px 10px var(--shadow-color));
     }
 
     .blocks-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 60px); /* Высота блока, чтобы учесть высоту .header */
+      height: calc(100vh - 80px);
       position: relative;
-      margin-top: 13%; /* Отступ сверху */
+      margin-top: 10%;
+      transform: translateZ(50px);
+      transition: transform 0.4s ease;
+      z-index: 2;
     }
-
-    /* Фон за контейнером блоков */
     .background-overlay {
       position: absolute;
-      background-color: #778899; /* Серый фон */
-      border-radius: 15px; /* Закругленные края */
-      padding: 20px;
-      z-index: 0;
-      width: max-content; /* Ширина по содержимому */
+      background: var(--background-overlay-color);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(10px); /* эффект стекла */
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1;
+      width: max-content;
+      box-shadow: 0 16px 32px var(--shadow-color);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      transform-style: preserve-3d;
+    }
+    .background-overlay:hover {
+      transform: translateZ(40px) scale(1.02);
+      box-shadow: 0 20px 40px var(--shadow-color);
     }
 
     .blocks-container {
       display: flex;
-      gap: 10px;
+      gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
       position: relative;
-      z-index: 1; /* Выше фонового блока */
-      transform: translateY(1%); /* Отступ вниз */
+      z-index: 2;
+      transform: translateY(2%);
+      transition: transform 0.4s ease;
     }
-
     .block {
+      position: relative;
       width: 133px;
       height: 133px;
-      background-color: black;
+      background: linear-gradient(135deg, #000, #333);
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #FFFFFF;
-      font-size: 16px;
+      color: var(--secondary-color);
+      font-size: 18px;
       font-weight: bold;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px var(--shadow-color);
+      transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
       text-align: center;
-      cursor: pointer; /* Курсор в виде руки для интерактивности */
-      user-select: none; /* Отключение выделения текста */
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      transform-style: preserve-3d;
     }
-
     .block:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      transform: translateY(-12px) translateZ(20px) scale(1.08) rotateX(3deg) rotateY(3deg);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(135deg, #333, #000);
     }
-
     .block:active {
-      transform: scale(0.95); /* Эффект при нажатии */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: translateY(0) translateZ(10px) scale(0.95);
+      box-shadow: 0 8px 16px var(--shadow-color);
+    }
+    /* Ripple эффект */
+    .block::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      background: var(--ripple-color);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+    }
+    .block:active::after {
+      width: 200%;
+      height: 200%;
+      opacity: 0.6;
+      transition: 0s;
+    }
+    /* Подсказки (Tooltips) */
+    .block:hover::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--tooltip-bg);
+      color: var(--tooltip-color);
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .block:hover::before {
+      opacity: 1;
     }
 
     a {
-      text-decoration: none; /* Убираем подчеркивание ссылок */
+      text-decoration: none;
     }
 
     /* Медиазапрос для планшетов и мобильных устройств */
@@ -138,148 +225,181 @@
         width: 250px;
         height: auto;
       }
-
       .blocks-wrapper {
-        margin-top: 10%;
+        margin-top: 15%;
       }
-
       .block {
         width: 100px;
         height: 100px;
         font-size: 14px;
       }
-
       .background-overlay {
-        padding: 10px;
-        border-radius: 10px;
+        padding: 15px;
+        border-radius: 15px;
       }
-
       .blocks-container {
-        gap: 5px;
+        gap: 10px;
       }
     }
 
     /* Медиазапрос для мобильных телефонов */
     @media (max-width: 480px) {
       .header {
-        font-size: 16px;
-        padding: 5px 10px;
+        font-size: 18px;
+        padding: 8px 16px;
       }
-
       .header img {
         width: 200px;
         height: auto;
       }
-
       .blocks-wrapper {
-        margin-top: 5%;
+        margin-top: 20%;
       }
-
       .block {
         width: 80px;
         height: 80px;
         font-size: 12px;
       }
-
       .background-overlay {
-        padding: 5px;
-        border-radius: 5px;
+        padding: 10px;
+        border-radius: 10px;
       }
-
       .blocks-container {
-        gap: 2px;
+        gap: 5px;
       }
     }
   </style>
 </head>
 <body>
   <div id="background">
-    <div class="wave"></div>
+    <!-- Canvas для сетчатой анимации -->
+    <canvas id="constellation"></canvas>
   </div>
 
-  <!-- Новый блок "Expert Credit" -->
+  <!-- Шапка с логотипом -->
   <div class="header">
     <img src="logo-default-480x80.png" alt="Icon">
   </div>
 
-  <!-- Обертка для фона и контейнера блоков -->
+  <!-- Обертка для фонового контейнера блоков -->
   <div class="blocks-wrapper">
     <div class="background-overlay">
       <div class="blocks-container">
         <a href="Call_center.html">
-          <div class="block">Моп'ам</div>
+          <div class="block" data-tooltip="Вход для Моп'ам" style="font-size: 14px;">Моп'ам</div>
         </a>
-
         <a href="specialist.html">
-          <div class="block">Специалистам</div>
+          <div class="block" data-tooltip="Вход для Специалистов" style="font-size: 14px;">Специалистам</div>
         </a>
-
         <a href="baza.html">
-          <div class="block">Структура</div>
+          <div class="block" data-tooltip="Структура компании" style="font-size: 14px;">Структура</div>
         </a>
-
         <a href="files.html">
-          <div class="block">Файлы</div>
+          <div class="block" data-tooltip="Работа с файлами" style="font-size: 14px;">Файлы</div>
         </a>
-
         <a href="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?pli=1&gid=1126028330#gid=1126028330">
-          <div class="block">График</div>
+          <div class="block" data-tooltip="График работы" style="font-size: 14px;">График</div>
         </a>
-
         <a href="AmoCRM.docx">
-          <div class="block">AmoCRM обуч</div>
+          <div class="block" data-tooltip="Обучение по AmoCRM" style="font-size: 14px;">AmoCRM обуч</div>
         </a>
       </div>
     </div>
   </div>
 
   <script>
-    function createParticles() {
-      const numParticles = 100;
-      const colors = ['#ffffff', '#ffcccc', '#ccffcc', '#ccccff'];
+    // Проверка статуса входа и перенаправление, если не авторизован
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = "index.html";
+    }
 
-      for (let i = 0; i < numParticles; i++) {
-        const particle = document.createElement('div');
-        particle.style.position = 'absolute';
-        particle.style.borderRadius = '50%';
-        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.width = `${Math.random() * 5 + 2}px`;
-        particle.style.height = particle.style.width;
-        particle.style.top = `${Math.random() * 100}vh`;
-        particle.style.left = `${Math.random() * 100}vw`;
-        particle.style.opacity = Math.random();
-        document.getElementById('background').appendChild(particle);
+    /* ====== Анимация «созвездного» фона (коннекты между точками) ====== */
+    const canvas = document.getElementById('constellation');
+    const ctx = canvas.getContext('2d');
 
-        // Animate the particle
-        const duration = Math.random() * 10 + 10; // Random duration between 10s and 20s
-        particle.style.animation = `move ${duration}s infinite linear`;
+    // Массив точек
+    let points = [];
+    const POINTS_COUNT = 70;      // количество точек
+    const MAX_DISTANCE = 120;     // максимальная дистанция для соединения линией
+    const SPEED = 0.5;           // скорость движения точек
+	const COLOR_DOT = 'rgba(0, 0, 139, 0.8)';  // Тёмно-синий (darkblue) с небольшой прозрачностью
+	const COLOR_LINE = 'rgba(0, 0, 139, 0.3)'; // Тот же цвет, но с большей прозрачностью для линий
 
-        // Define the animation
-        const keyframes = `
-          @keyframes move {
-            0% {
-              transform: translate(0, 0);
-            }
-            100% {
-              transform: translate(${Math.random() * 100 - 50}vw, ${Math.random() * 100 - 50}vh);
-            }
-          }
-        `;
-        const styleSheet = document.createElement('style');
-        styleSheet.type = 'text/css';
-        styleSheet.innerText = keyframes;
-        document.head.appendChild(styleSheet);
+
+    // Адаптация размеров canvas
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Инициализация точек
+    function initPoints() {
+      points = [];
+      for (let i = 0; i < POINTS_COUNT; i++) {
+        points.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * SPEED,
+          vy: (Math.random() - 0.5) * SPEED
+        });
       }
     }
 
-    createParticles();
-  </script>
-<script>
-    // Проверка статуса входа
-    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-      // Если пользователь не вошел в систему, перенаправить на страницу входа
-      window.location.href = "index.html";
+    // Обновление позиции каждой точки
+    function updatePoints() {
+      for (let i = 0; i < POINTS_COUNT; i++) {
+        const p = points[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Отражение от краёв экрана
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      }
     }
+
+    // Рисуем точки и линии
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Рисуем линии между точками, если они достаточно близко
+      for (let i = 0; i < POINTS_COUNT; i++) {
+        for (let j = i + 1; j < POINTS_COUNT; j++) {
+          const p1 = points[i];
+          const p2 = points[j];
+          const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+          if (dist < MAX_DISTANCE) {
+            ctx.strokeStyle = COLOR_LINE;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Рисуем точки
+      for (let i = 0; i < POINTS_COUNT; i++) {
+        ctx.fillStyle = COLOR_DOT;
+        ctx.beginPath();
+        ctx.arc(points[i].x, points[i].y, 2, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    // Анимационный цикл
+    function animate() {
+      requestAnimationFrame(animate);
+      updatePoints();
+      draw();
+    }
+
+    // Инициализация и запуск
+    initPoints();
+    animate();
   </script>
 </body>
 </html>
