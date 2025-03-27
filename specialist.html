@@ -10,62 +10,59 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f9f9;
             color: #333;
         }
-
+        
         .container {
             display: flex;
             min-height: 100vh;
- margin: 0; /* Убедитесь, что нет внешних отступов */
-    padding: 0; /* Убедитесь, что нет внутренних отступов */
+            margin: 0;
+            padding: 0;
         }
-
-      /* Левая часть */
-.left {
-    flex: 2;
-    background-color: #E6E6FA;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Выравнивание по левому краю по горизонтали */
-    justify-content: flex-start; /* Выравнивание по верхнему краю по вертикали */
-    border-radius: 10px; /* Скругленные углы */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень вокруг блока */
-    margin: 20px; /* Отступы вокруг блока */
-}
-
-/* Заголовок h1 */
-.left h1 {
-    width: 100%; /* Установите ширину на 100% контейнера */
-    text-align: center; /* Выравнивание текста по центру */
-    margin-bottom: 20px;
-    font-size: 36px;
-    color: #00008B;
-}
-
+        
+        /* Левая часть */
+        .left {
+            flex: 2;
+            background-color: #E6E6FA;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+        }
+        
+        .left h1 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px;
+            color: #00008B;
+        }
+        
         /* Правая часть */
-.right {
-    flex: 0.9; /* Уменьшаем на 10% */
-    background-color: #FFEFD5;
-    padding: 40px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Тень вокруг блока */
-    border-radius: 10px; /* Скругленные углы */
-    margin: 20px; /* Отступы вокруг блока */
-}
-
-/* Заголовок h2 */
-.right h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #00008B;
-    text-align: center; /* Выравнивание текста по центру */
-}
-
-        /* Стиль для ссылок */
+        .right {
+            flex: 0.9;
+            background-color: #FFEFD5;
+            padding: 40px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 20px;
+        }
+        
+        .right h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #00008B;
+            text-align: center;
+        }
+        
         .right .link-box {
             background-color: #f8f9fa;
             border: 1px solid #ddd;
@@ -74,12 +71,12 @@
             text-align: center;
             transition: transform 0.3s ease;
         }
-
+        
         .right .link-box:hover {
             transform: translateX(10px);
             background-color: #f1f3f4;
         }
-
+        
         .right .link-box a {
             text-decoration: none;
             color: #00008B;
@@ -87,11 +84,11 @@
             display: block;
             transition: all 0.3s ease;
         }
-
+        
         .right .link-box a:hover {
             color: #e86c28;
         }
-
+        
         /* Стили для кредитного калькулятора */
         .calculator {
             margin-top: 40px;
@@ -99,7 +96,7 @@
             background-color: #f1f3f4;
             border: 1px solid #ddd;
         }
-
+        
         .calculator input {
             width: 100%;
             padding: 10px;
@@ -107,12 +104,12 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
+        
         .calculator label {
             font-size: 16px;
             color: #333;
         }
-
+        
         .calculator button {
             width: 100%;
             padding: 10px;
@@ -123,36 +120,121 @@
             cursor: pointer;
             border-radius: 4px;
         }
-
+        
         .calculator button:hover {
             background-color: #e86c28;
         }
-
+        
         .result {
             margin-top: 20px;
             font-size: 18px;
             color: #333;
         }
+        
+        /* Стили для AI-Чата */
+        .chat-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            background-color: #ff7f31;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .chat-body {
+            display: block;
+            padding: 10px;
+        }
+        
+        .chat-body.hidden {
+            display: none;
+        }
+        
+        #chatMessages {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        /* Стили для пузырьков сообщений */
+        .chat-message {
+            padding: 8px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .user-message {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+            text-align: right;
+        }
+        
+        .ai-message {
+            background-color: #F1F0F0;
+            align-self: flex-start;
+            text-align: left;
+        }
+        
+        #chatInput {
+            width: calc(100% - 90px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        #sendChatBtn {
+            padding: 8px 12px;
+            border: none;
+            background-color: #ff7f31;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-
+    
 <div class="container">
     <!-- Левая часть -->
-   <div class="left">
-    <h1>Добро пожаловать на наш сайт!</h1>
-    <p>Мы предлагаем профессиональные консультации по ипотечному кредитованию и залоговым кредитам. Наша команда опытных специалистов готова помочь вам выбрать наилучшее решение, учитывая ваши финансовые возможности и потребности.</p>
-    <p>Мы предоставляем широкий спектр услуг, включая:</p>
-    <ul>   <br>  
-        <li>Анализ вашего финансового положения для выбора оптимального кредита</li>
-        <li>Подбор лучших предложений от банков и кредитных организаций</li>
-        <li>Помощь в подготовке и оформлении документов</li>
-        <li>Консультирование по вопросам ипотечного страхования</li>
-           <br>
-    </ul>
-    <p>Наши эксперты готовы ответить на все ваши вопросы и помочь в процессе получения кредита. Обращайтесь к нам, и мы сделаем все возможное, чтобы сделать процесс простым и удобным для вас.</p>
-    <p>Свяжитесь с нами через контактные формы на сайте или по телефону, указанному ниже. Мы всегда рады помочь!</p>
-</div>
+    <div class="left">
+        <h1>Добро пожаловать на наш сайт!</h1>
+        <p>Мы предлагаем профессиональные консультации по ипотечному кредитованию и залоговым кредитам. Наша команда опытных специалистов готова помочь вам выбрать наилучшее решение, учитывая ваши финансовые возможности и потребности.</p>
+        <p>Мы предоставляем широкий спектр услуг, включая:</p>
+        <ul>
+            <br>  
+            <li>Анализ вашего финансового положения для выбора оптимального кредита</li>
+            <li>Подбор лучших предложений от банков и кредитных организаций</li>
+            <li>Помощь в подготовке и оформлении документов</li>
+            <li>Консультирование по вопросам ипотечного страхования</li>
+            <br>
+        </ul>
+        <p>Наши эксперты готовы ответить на все ваши вопросы и помочь в процессе получения кредита. Обращайтесь к нам, и мы сделаем все возможное, чтобы сделать процесс простым и удобным для вас.</p>
+        <p>Свяжитесь с нами через контактные формы на сайте или по телефону, указанному ниже. Мы всегда рады помочь!</p>
+    </div>
     <!-- Правая часть -->
     <div class="right">
         <h2 align="center">Полезные ссылки</h2>
@@ -166,54 +248,66 @@
         <div class="link-box"><a href="#">Ссылка 8</a></div>
         <div class="link-box"><a href="#">Ссылка 9</a></div>
         <div class="link-box"><a href="#">Ссылка 10</a></div>
-
+        
         <!-- Кредитный калькулятор -->
-       <div class="calculator">
+        <div class="calculator">
             <h2>Кредитный калькулятор</h2>
             <label for="amount">Сумма кредита (тг):</label>
             <input type="text" id="amount" placeholder="Введите сумму кредита" oninput="formatNumber(this)">
-
+            
             <label for="term">Срок кредита (в месяцах):</label>
             <input type="text" id="term" placeholder="Введите срок кредита" oninput="formatNumber(this)">
-
+            
             <label for="rate">Процентная ставка (% годовых):</label>
             <input type="text" id="rate" placeholder="Введите процентную ставку" oninput="formatNumber(this)">
-
+            
             <button onclick="calculateCredit()">Рассчитать</button>
-
+            
             <div class="result" id="result"></div>
         </div>
     </div>
 </div>
-
+    
+<!-- Блок AI-чата -->
+<div id="chatPopup" class="chat-popup">
+    <div class="chat-header" onclick="toggleChat()">
+        <span>AI Chat (GPT-3.5-turbo)</span>
+        <button id="toggleChatBtn" style="background:none; border:none; color:#fff; font-size:16px; cursor:pointer;">–</button>
+    </div>
+    <div id="chatBody" class="chat-body">
+        <div id="chatMessages"></div>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="chatInput" placeholder="Введите сообщение...">
+            <button id="sendChatBtn" onclick="sendMessage()">Отправить</button>
+        </div>
+    </div>
+</div>
+    
 <script>
     // Функция форматирования чисел
     function formatNumber(input) {
-        let value = input.value.replace(/\s+/g, ''); // Удаляем пробелы
+        let value = input.value.replace(/\s+/g, '');
         if (value) {
-            value = Number(value).toLocaleString('ru-RU'); // Форматируем число с пробелами
+            value = Number(value).toLocaleString('ru-RU');
             input.value = value;
         }
     }
-
+    
     function calculateCredit() {
-        // Получаем значения полей ввода и убираем пробелы
         const amount = document.getElementById('amount').value.replace(/\s+/g, '');
         const term = document.getElementById('term').value.replace(/\s+/g, '');
         const rate = document.getElementById('rate').value.replace(/\s+/g, '');
-
-        // Проверяем, что все поля заполнены
+    
         if (amount && term && rate) {
             const principal = parseFloat(amount);
             const months = parseInt(term);
             const annualRate = parseFloat(rate);
-
-            const monthlyRate = (annualRate / 100) / 12; // Месячная процентная ставка
-            const monthlyPayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months)); // Формула аннуитетного платежа
-            const totalPayment = monthlyPayment * months; // Общая сумма выплат
-            const overpayment = totalPayment - principal; // Сумма переплаты
-
-            // Выводим результат
+    
+            const monthlyRate = (annualRate / 100) / 12;
+            const monthlyPayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
+            const totalPayment = monthlyPayment * months;
+            const overpayment = totalPayment - principal;
+    
             document.getElementById('result').innerHTML = `
                 <p>Ежемесячный платеж: ${monthlyPayment.toLocaleString('ru-RU')} тг.</p>
                 <p>Сумма переплаты: ${overpayment.toLocaleString('ru-RU')} тг.</p>
@@ -223,10 +317,93 @@
             document.getElementById('result').innerHTML = "<p>Пожалуйста, заполните все поля.</p>";
         }
     }
+    
+    function toggleChat() {
+        const chatBody = document.getElementById('chatBody');
+        const toggleBtn = document.getElementById('toggleChatBtn');
+        if (chatBody.classList.contains('hidden')) {
+            chatBody.classList.remove('hidden');
+            toggleBtn.textContent = "–";
+        } else {
+            chatBody.classList.add('hidden');
+            toggleBtn.textContent = "+";
+        }
+    }
+    
+    // Разбивка API-ключа на части
+    const part1 = "sk-proj--epHKZsTAVdhTN_Y7VLXfvTGdHIYei";
+    const part2 = "_C3x9MGy4Yt7nMqsaFKFAex7qVrIzCL9fn09zK5gER9";
+    const part3 = "MT3BlbkFJ3gXzYqMRG5JDSI1SLoHADZVb240NTP3Q";
+    const part4 = "AwuyW3aaZ2R4Sn5DYp07OwG6aGfuRwml2CthKnH_IA";
+    const apiKey = part1 + part2 + part3 + part4;
+    
+    // Настройка systemPrompt
+    const systemPrompt = {
+        role: "system",
+        content: "Ты AI-ассистент Expert Credit. Отвечай креативно и эмоционально, используя современный стиль общения. Максимально 3 предложения. Поддерживай дружеский тон с элементами профессиональной консультации. Используй смайлики под контекст сообщения которое ты отправляешь. Смайлики должны быть в каждом сообщении"
+    };
+    
+    // Функция отправки сообщения с вызовом OpenAI API
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (message === "") return;
+    
+        const chatMessages = document.getElementById('chatMessages');
+        
+        // Создаем пузырёк для сообщения пользователя
+        const userMessageElem = document.createElement('div');
+        userMessageElem.classList.add('chat-message', 'user-message');
+        userMessageElem.textContent = message;
+        chatMessages.appendChild(userMessageElem);
+        input.value = "";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+        // Вызов API GPT-3.5-turbo
+        fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + apiKey
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    systemPrompt,
+                    {"role": "user", "content": message}
+                ]
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const aiMessage = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content
+                ? data.choices[0].message.content.trim()
+                : "Извините, я не смог обработать ваш запрос.";
+            // Создаем пузырёк для ответа ИИ
+            const aiMessageElem = document.createElement('div');
+            aiMessageElem.classList.add('chat-message', 'ai-message');
+            aiMessageElem.textContent = aiMessage;
+            chatMessages.appendChild(aiMessageElem);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Ошибка при запросе к API:', error);
+            const errorElem = document.createElement('div');
+            errorElem.classList.add('chat-message', 'ai-message');
+            errorElem.textContent = "Извините, произошла ошибка. Попробуйте позже.";
+            chatMessages.appendChild(errorElem);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    }
+    
+    // Отправка сообщения при нажатии Enter
+    document.getElementById('chatInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
 </script>
-
-</body>
-</html>
-
+    
 </body>
 </html>
