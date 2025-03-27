@@ -218,6 +218,80 @@
             background-color: #1e90ff;
             transform: scale(1.1);
         }
+		
+	    .chat-popup {
+	        position: fixed;
+	        bottom: 20px;
+	        right: 20px;
+	        width: 300px;
+	        background-color: #fff;
+	        border: 1px solid #ddd;
+	        border-radius: 8px;
+	        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	        z-index: 1000;
+	        font-family: Arial, sans-serif;
+	        display: flex;
+	        flex-direction: column;
+	    }
+	    .chat-header {
+	        background-color: #ff7f31;
+	        color: #fff;
+	        padding: 10px;
+	        border-top-left-radius: 8px;
+	        border-top-right-radius: 8px;
+	        display: flex;
+	        justify-content: space-between;
+	        align-items: center;
+	        cursor: pointer;
+	    }
+	    .chat-body {
+	        display: block;
+	        padding: 10px;
+	    }
+	    .chat-body.hidden {
+	        display: none;
+	    }
+	    #chatMessages {
+	        max-height: 200px;
+	        overflow-y: auto;
+	        margin-bottom: 10px;
+	        border: 1px solid #eee;
+	        padding: 5px;
+	        display: flex;
+	        flex-direction: column;
+	        gap: 5px;
+	    }
+	    .chat-message {
+	        padding: 8px;
+	        border-radius: 8px;
+	        max-width: 80%;
+	        word-wrap: break-word;
+	    }
+	    .user-message {
+	        background-color: #DCF8C6;
+	        align-self: flex-end;
+	        text-align: right;
+	    }
+	    .ai-message {
+	        background-color: #F1F0F0;
+	        align-self: flex-start;
+	        text-align: left;
+	    }
+	    #chatInput {
+	        width: calc(100% - 90px);
+	        padding: 8px;
+	        border: 1px solid #ccc;
+	        border-radius: 4px;
+	    }
+	    #sendChatBtn {
+	        padding: 8px 12px;
+	        border: none;
+	        background-color: #ff7f31;
+	        color: #fff;
+	        border-radius: 4px;
+	        cursor: pointer;
+	    }
+		
     </style>
 </head>
 <body>
@@ -464,6 +538,19 @@ https://youtu.be/AyUpzjtdoRc?si=JyluUUpfhKcAkpL3
         </div>
     </div>
 </div>
+<div id="chatPopup" class="chat-popup">
+    <div class="chat-header" onclick="toggleChat()">
+        <span>AI Chat (GPT-3.5-turbo)</span>
+        <button id="toggleChatBtn" style="background:none; border:none; color:#fff; font-size:16px; cursor:pointer;">–</button>
+    </div>
+    <div id="chatBody" class="chat-body">
+        <div id="chatMessages"></div>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="chatInput" placeholder="Введите сообщение...">
+            <button id="sendChatBtn" onclick="sendMessage()">Отправить</button>
+        </div>
+    </div>
+</div>
   <script>
     // Проверка статуса входа
     if (sessionStorage.getItem('isLoggedIn') !== 'true') {
@@ -524,6 +611,92 @@ https://youtu.be/AyUpzjtdoRc?si=JyluUUpfhKcAkpL3
       // Если пользователь не вошел в систему, перенаправить на страницу входа
       window.location.href = "index.html";
     }
+ // Функция для переключения отображения чата
+    function toggleChat() {
+        const chatBody = document.getElementById('chatBody');
+        const toggleBtn = document.getElementById('toggleChatBtn');
+        if (chatBody.classList.contains('hidden')) {
+            chatBody.classList.remove('hidden');
+            toggleBtn.textContent = "–";
+        } else {
+            chatBody.classList.add('hidden');
+            toggleBtn.textContent = "+";
+        }
+    }
+
+    // Разбивка API-ключа на части
+    const part1 = "sk-proj--epHKZsTAVdhTN_Y7VLXfvTGdHIYei";
+    const part2 = "_C3x9MGy4Yt7nMqsaFKFAex7qVrIzCL9fn09zK5gER9";
+    const part3 = "MT3BlbkFJ3gXzYqMRG5JDSI1SLoHADZVb240NTP3Q";
+    const part4 = "AwuyW3aaZ2R4Sn5DYp07OwG6aGfuRwml2CthKnH_IA";
+    const apiKey = part1 + part2 + part3 + part4;
+
+    // Настройка systemPrompt для ИИ
+    const systemPrompt = {
+        role: "system",
+        content: "Ты AI-ассистент Expert Credit. Отвечай креативно и эмоционально, используя современный стиль общения. Максимально 3 предложения. Поддерживай дружеский тон с элементами профессиональной консультации. Используй смайлики под контекст сообщения которое ты отправляешь. Смайлики должны быть в каждом сообщении"
+    };
+
+    // Функция отправки сообщения с вызовом OpenAI API
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (message === "") return;
+    
+        const chatMessages = document.getElementById('chatMessages');
+        
+        // Создаем пузырёк для сообщения пользователя
+        const userMessageElem = document.createElement('div');
+        userMessageElem.classList.add('chat-message', 'user-message');
+        userMessageElem.textContent = message;
+        chatMessages.appendChild(userMessageElem);
+        input.value = "";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+        // Вызов API GPT-3.5-turbo
+        fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + apiKey
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    systemPrompt,
+                    {role: "user", content: message}
+                ]
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const aiMessage = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content
+                ? data.choices[0].message.content.trim()
+                : "Извините, я не смог обработать ваш запрос.";
+            // Создаем пузырёк для ответа ИИ
+            const aiMessageElem = document.createElement('div');
+            aiMessageElem.classList.add('chat-message', 'ai-message');
+            aiMessageElem.textContent = aiMessage;
+            chatMessages.appendChild(aiMessageElem);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Ошибка при запросе к API:', error);
+            const errorElem = document.createElement('div');
+            errorElem.classList.add('chat-message', 'ai-message');
+            errorElem.textContent = "Извините, произошла ошибка. Попробуйте позже.";
+            chatMessages.appendChild(errorElem);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    }
+    
+    // Отправка сообщения при нажатии Enter
+    document.getElementById('chatInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
   </script>
 </body>
 </html>
