@@ -1,156 +1,342 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Файлы для скачивания</title>
-    <style>
-        /* Основные стили */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-
-        .downloads {
-            padding: 50px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            max-width: 800px;
-            margin: 0 auto;
-            animation: fadeIn 1s ease-out;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .file-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            background-color: #fafafa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .file-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .file-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-        }
-
-        .file-info {
-            flex: 1;
-        }
-
-        h3 {
-            margin: 0;
-            color: #333;
-        }
-
-        p {
-            margin: 5px 0;
-            color: #666;
-        }
-
-        .download-button {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .download-button:hover {
-            background-color: #0056b3;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Программа - Файлы для скачивания</title>
+  <!-- Подключение Google Fonts и Material Icons -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    /* CSS-переменные для тем */
+    :root {
+      --bg-color: #eceff1;
+      --container-bg: #ffffff;
+      --header-bg: #546e7a;
+      --header-color: #ffffff;
+      --border-color: #cfd8dc;
+      --text-color: #37474f;
+      --subtext-color: #607d8b;
+      --accent-color: #007bff;
+      --accent-hover: #0056b3;
+      --favorite-color: #e91e63;
+    }
+    .dark-theme {
+      --bg-color: #263238;
+      --container-bg: #37474f;
+      --header-bg: #455a64;
+      --header-color: #eceff1;
+      --border-color: #546a7a;
+      --text-color: #eceff1;
+      --subtext-color: #b0bec5;
+      --accent-color: #82b1ff;
+      --accent-hover: #448aff;
+      --favorite-color: #f06292;
+    }
+    /* Общие стили */
+    body {
+      margin: 0;
+      background-color: var(--bg-color);
+      font-family: 'Roboto', sans-serif;
+      transition: background-color 0.4s ease;
+    }
+    .app-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: var(--container-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: background-color 0.4s ease, border-color 0.4s ease;
+    }
+    /* Заголовок приложения */
+    .app-header {
+      background-color: var(--header-bg);
+      color: var(--header-color);
+      padding: 12px 16px;
+      font-size: 18px;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .header-button {
+      background: none;
+      border: none;
+      color: var(--header-color);
+      font-size: 16px;
+      cursor: pointer;
+      outline: none;
+      transition: color 0.3s;
+    }
+    .header-button:hover {
+      color: var(--accent-color);
+    }
+    /* Поисковая панель */
+    .search-container {
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+      background-color: var(--container-bg);
+    }
+    .search-input {
+      width: 80%;
+      max-width: 300px;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 8px rgba(0,123,255,0.3);
+    }
+    /* Контент приложения */
+    .app-content {
+      padding: 20px;
+    }
+    /* Элементы списка файлов */
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s, transform 0.2s;
+      cursor: default;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.4s forwards;
+    }
+    .file-item:last-child {
+      border-bottom: none;
+    }
+    .file-item:hover {
+      background-color: rgba(0,123,255,0.1);
+      transform: translateY(-2px);
+    }
+    /* Иконки для файлов */
+    .file-icon {
+      font-size: 24px;
+      color: var(--accent-color);
+      width: 32px;
+      text-align: center;
+      margin-right: 12px;
+    }
+    /* Детали файла */
+    .file-details {
+      flex: 1;
+    }
+    .file-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-color);
+    }
+    .file-description {
+      margin: 0;
+      font-size: 12px;
+      color: var(--subtext-color);
+    }
+    /* Кнопки */
+    .download-btn {
+      background-color: var(--accent-color);
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 14px;
+      text-decoration: none;
+      margin-right: 8px;
+    }
+    .download-btn:hover {
+      background-color: var(--accent-hover);
+    }
+    .favorite-icon {
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--subtext-color);
+      transition: color 0.3s;
+    }
+    .favorite-icon.active {
+      color: var(--favorite-color);
+    }
+    /* Анимация плавного появления */
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .file-item:nth-child(1) { animation-delay: 0.1s; }
+    .file-item:nth-child(2) { animation-delay: 0.2s; }
+    .file-item:nth-child(3) { animation-delay: 0.3s; }
+  </style>
 </head>
 <body>
-    <section class="downloads">
-        <h2>Файлы для скачивания и просмотра</h2>
-        <div class="file-list">
-            <div class="file-item">
-                <img src="logo.png" alt="PDF Icon" class="file-icon">
-                <div class="file-info">
-                    <h3>Чек лист</h3>
-                    <p></p>
-                    <a href="chek.pdf" class="download-button" download>Скачать</a>
-                </div>
-            </div>
-            <div class="file-item">
-                <img src="logo.png" alt="DOC Icon" class="file-icon">
-                <div class="file-info">
-                    <h3>Документ 2</h3>
-                    <p></p>
-                    <a href="AmoCRM.docx" class="download-button" download>Скачать</a>
-                </div>
-            </div>
-        <div class="file-list">
-            <div class="file-item">
-                <img src="logo.png" alt="PDF Icon" class="file-icon">
-                <div class="file-info">
-                    <h3>Документ 1</h3>
-                    <p></p>
-                    <a href="document1.pdf" class="download-button" download>Скачать</a>
-                </div>
-            </div>
-        <div class="file-list">
-            <div class="file-item">
-                <img src="logo.png" alt="PDF Icon" class="file-icon">
-                <div class="file-info">
-                    <h3>Документ 1</h3>
-                    <p></p>
-                    <a href="document1.pdf" class="download-button" download>Скачать</a>
-                </div>
-            </div>
-        <div class="file-list">
-            <div class="file-item">
-                <img src="logo.png" alt="PDF Icon" class="file-icon">
-                <div class="file-info">
-                    <h3>Документ 1</h3>
-                    <p></p>
-                    <a href="document1.pdf" class="download-button" download>Скачать</a>
-                </div>
-            </div>
-            <!-- Добавьте больше блоков file-item по мере необходимости -->
+  <div class="app-container">
+    <div class="app-header">
+      <span>Файлы для скачивания</span>
+      <div class="header-buttons">
+        <button id="toggleFilterBtn" class="header-button" onclick="toggleFavoriteFilter()">Показать избранное</button>
+        <button class="header-button" onclick="toggleTheme()"></button>
+      </div>
+    </div>
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Поиск файлов..." onkeyup="filterFiles()">
+    </div>
+    <div class="app-content" id="fileList">
+      <div class="file-item" data-title="Чек лист">
+        <div class="file-icon">&#128196;</div>
+        <div class="file-details">
+          <p class="file-title">Чек лист</p>
+          <p class="file-description">PDF документ</p>
         </div>
-    </section>
-<script>
+        <a href="chek.pdf" class="download-btn" download>Скачать</a>
+        <span class="favorite-icon material-icons" onclick="toggleFavorite(event, this)">favorite_border</span>
+      </div>
+      <div class="file-item" data-title="Документ 2">
+        <div class="file-icon">&#128196;</div>
+        <div class="file-details">
+          <p class="file-title">Документ 2</p>
+          <p class="file-description">DOCX документ</p>
+        </div>
+        <a href="AmoCRM.docx" class="download-btn" download>Скачать</a>
+        <span class="favorite-icon material-icons" onclick="toggleFavorite(event, this)">favorite_border</span>
+      </div>
+      <div class="file-item" data-title="Документ 1">
+        <div class="file-icon">&#128196;</div>
+        <div class="file-details">
+          <p class="file-title">Документ 1</p>
+          <p class="file-description">PDF документ</p>
+        </div>
+        <a href="document1.pdf" class="download-btn" download>Скачать</a>
+        <span class="favorite-icon material-icons" onclick="toggleFavorite(event, this)">favorite_border</span>
+      </div>
+    </div>
+  </div>
+  
+  <script>
     // Проверка статуса входа
     if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-      // Если пользователь не вошел в систему, перенаправить на страницу входа
       window.location.href = "index.html";
     }
+    
+    // Переключение темы
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+    }
+    
+    // Функция фильтрации файлов по названию
+    function filterFiles() {
+      const query = document.querySelector('.search-input').value.toLowerCase();
+      const files = document.querySelectorAll('.file-item');
+      files.forEach(file => {
+        const title = file.getAttribute('data-title').toLowerCase();
+        // Если активирован фильтр избранного, то не трогаем свойство display (оно будет обновлено отдельно)
+        if (!file.dataset.forceHidden) {
+          file.style.display = title.includes(query) ? "flex" : "none";
+        }
+      });
+    }
+    
+    // Получение сохранённых избранных файлов из localStorage
+    function loadFavorites() {
+      return JSON.parse(localStorage.getItem('favoriteFiles')) || [];
+    }
+    
+    // Сохранение избранных файлов в localStorage
+    function saveFavorites(favorites) {
+      localStorage.setItem('favoriteFiles', JSON.stringify(favorites));
+    }
+    
+    // Функция переключения избранного файла
+    function toggleFavorite(event, icon) {
+      event.stopPropagation();
+      const fileItem = icon.closest('.file-item');
+      const fileName = fileItem.getAttribute('data-title');
+      let favorites = loadFavorites();
+      
+      if (icon.classList.contains('active')) {
+        icon.classList.remove('active');
+        icon.textContent = "favorite_border";
+        favorites = favorites.filter(name => name !== fileName);
+      } else {
+        icon.classList.add('active');
+        icon.textContent = "favorite";
+        if (!favorites.includes(fileName)) {
+          favorites.push(fileName);
+        }
+      }
+      
+      saveFavorites(favorites);
+      // Если фильтр избранного включен, обновляем список
+      if (favoritesFilter) {
+        filterFavorites();
+      }
+    }
+    
+    // Флаг фильтра избранного
+    let favoritesFilter = false;
+    
+    // Функция переключения фильтра избранного
+    function toggleFavoriteFilter() {
+      favoritesFilter = !favoritesFilter;
+      const btn = document.getElementById('toggleFilterBtn');
+      btn.textContent = favoritesFilter ? "Показать основные файлы" : "Показать избранное";
+      filterFavorites();
+    }
+    
+    // Функция применения фильтра избранного
+    function filterFavorites() {
+      const favorites = loadFavorites();
+      const files = document.querySelectorAll('.file-item');
+      files.forEach(file => {
+        const fileName = file.getAttribute('data-title');
+        // Если активирован фильтр избранного, показываем только файлы, имя которых в списке favorites
+        if (favoritesFilter) {
+          file.style.display = favorites.includes(fileName) ? "flex" : "none";
+          // Отмечаем избранное (на всякий случай)
+          const icon = file.querySelector('.favorite-icon');
+          if (favorites.includes(fileName)) {
+            icon.classList.add('active');
+            icon.textContent = "favorite";
+          } else {
+            icon.classList.remove('active');
+            icon.textContent = "favorite_border";
+          }
+        } else {
+          // Если не активен фильтр, показываем все файлы, учитывая поиск
+          file.style.display = "flex";
+          filterFiles();
+        }
+      });
+    }
+    
+    // При загрузке страницы восстанавливаем состояние избранного
+    document.addEventListener('DOMContentLoaded', () => {
+      const favorites = loadFavorites();
+      const files = document.querySelectorAll('.file-item');
+      files.forEach(file => {
+        const fileName = file.getAttribute('data-title');
+        const icon = file.querySelector('.favorite-icon');
+        if (favorites.includes(fileName)) {
+          icon.classList.add('active');
+          icon.textContent = "favorite";
+        } else {
+          icon.classList.remove('active');
+          icon.textContent = "favorite_border";
+        }
+      });
+    });
   </script>
 </body>
 </html>
