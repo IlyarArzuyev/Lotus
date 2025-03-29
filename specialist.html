@@ -286,38 +286,49 @@
     
 <script>
     // Функция форматирования чисел
-    function formatNumber(input) {
-        let value = input.value.replace(/\s+/g, '');
-        if (value) {
-            value = Number(value).toLocaleString('ru-RU');
-            input.value = value;
-        }
-    }
+	function formatNumber(input) {
+	    let value = input.value.replace(/\s+/g, '').replace(',', '.'); // Убираем пробелы и заменяем запятую на точку
+	    if (!isNaN(value) && value !== "") {
+	        if (input.id === "rate") {
+	            input.value = value; // Для процентной ставки не форматируем пробелами
+	        } else {
+	            input.value = Number(value).toLocaleString('ru-RU'); // Форматируем с пробелами
+	        }
+	    }
+	}
+
+	function calculateCredit() {
+	    const amount = document.getElementById('amount').value.replace(/\s+/g, '');
+	    const term = document.getElementById('term').value.replace(/\s+/g, '');
+	    const rate = document.getElementById('rate').value.replace(/\s+/g, '').replace(',', '.'); // Заменяем запятую на точку
+
+	    if (amount && term && rate) {
+	        const principal = parseFloat(amount);
+	        const months = parseInt(term);
+	        const annualRate = parseFloat(rate);
+
+	        if (isNaN(principal) || isNaN(months) || isNaN(annualRate)) {
+	            document.getElementById('result').innerHTML = "<p>Введите корректные числа.</p>";
+	            return;
+	        }
+
+	        const monthlyRate = (annualRate / 100) / 12;
+	        const monthlyPayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
+	        const totalPayment = monthlyPayment * months;
+	        const overpayment = totalPayment - principal;
+
+	        document.getElementById('result').innerHTML = `
+	            <p>Ежемесячный платеж: ${monthlyPayment.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} тг.</p>
+	            <p>Сумма переплаты: ${overpayment.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} тг.</p>
+	            <p>Общая сумма выплат: ${totalPayment.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} тг.</p>
+	        `;
+	    } else {
+	        document.getElementById('result').innerHTML = "<p>Пожалуйста, заполните все поля.</p>";
+	    }
+	}
+
+	
     
-    function calculateCredit() {
-        const amount = document.getElementById('amount').value.replace(/\s+/g, '');
-        const term = document.getElementById('term').value.replace(/\s+/g, '');
-        const rate = document.getElementById('rate').value.replace(/\s+/g, '');
-    
-        if (amount && term && rate) {
-            const principal = parseFloat(amount);
-            const months = parseInt(term);
-            const annualRate = parseFloat(rate);
-    
-            const monthlyRate = (annualRate / 100) / 12;
-            const monthlyPayment = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
-            const totalPayment = monthlyPayment * months;
-            const overpayment = totalPayment - principal;
-    
-            document.getElementById('result').innerHTML = `
-                <p>Ежемесячный платеж: ${monthlyPayment.toLocaleString('ru-RU')} тг.</p>
-                <p>Сумма переплаты: ${overpayment.toLocaleString('ru-RU')} тг.</p>
-                <p>Общая сумма выплат: ${totalPayment.toLocaleString('ru-RU')} тг.</p>
-            `;
-        } else {
-            document.getElementById('result').innerHTML = "<p>Пожалуйста, заполните все поля.</p>";
-        }
-    }
     
     function toggleChat() {
         const chatBody = document.getElementById('chatBody');
