@@ -179,6 +179,38 @@
       }
       document.getElementById("result").innerText = resultText;
     }
+    function calculate() {
+      let resultText = "Введите корректные значения.";
+      if (currentCalculator === 'ob') {
+        let nv = parseInput("nv");
+        let ds = parseInput("ds");
+        if (!isNaN(nv) && !isNaN(ds) && ds !== 0) {
+          let result = (nv * 1000) / ds;
+          // Формула: ОП = (НВ * 1000) / ДС
+          resultText = "ОП равен: " + result.toLocaleString('ru-RU', { maximumFractionDigits: 0 }) +
+                       "\nФормула: ОП = (НВ * 1000) / ДС";
+        }
+      } else if (currentCalculator === 'alt') {
+        let ds_alt = parseInput("ds_alt");
+        let op = parseInput("op");
+        if (!isNaN(ds_alt) && !isNaN(op)) {
+          let result = (ds_alt * op) / 1000;
+          // Формула: НВ = (ДС * ОП) / 1000
+          resultText = "НВ равен: " + result.toLocaleString('ru-RU', { maximumFractionDigits: 0 }) +
+                       "\nФормула: НВ = (ДС * ОП) / 1000";
+        }
+      } else if (currentCalculator === 'ds') {
+        let nv_ds = parseInput("nv_ds");
+        let op_ds = parseInput("op_ds");
+        if (!isNaN(nv_ds) && !isNaN(op_ds) && op_ds !== 0) {
+          let result = (nv_ds * 1000) / op_ds;
+          // Формула: ДС = (НВ * 1000) / ОП
+          resultText = "ДС равен: " + result.toLocaleString('ru-RU', { maximumFractionDigits: 0 }) +
+                       "\nФормула: ДС = (НВ * 1000) / ОП";
+        }
+      }
+      document.getElementById("result").innerText = resultText;
+    }
   </script>
 </body>
 </html>
