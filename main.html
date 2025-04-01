@@ -2,407 +2,521 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expert Credit</title>
-  <!-- Подключаем шрифт Roboto для Material-стиля -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Банковский Дашборд</title>
   <style>
-    :root {
-      --primary-color: #FF4500;
-      --primary-light: #FF6347;
-      --secondary-color: #ffffff;
-      --background-overlay-color: rgba(119, 136, 153, 0.7); /* полупрозрачный для glassmorphism */
-      --shadow-color: rgba(0, 0, 0, 0.3);
-      --ripple-color: rgba(255, 255, 255, 0.3);
-      --tooltip-bg: rgba(0, 0, 0, 0.7);
-      --tooltip-color: #fff;
-    }
-
-    body {
+    /* Базовый сброс и стили */
+    * {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      font-family: 'Roboto', Arial, sans-serif;
-      background: linear-gradient(135deg, #FAF0E6 0%, #FFEBCD 100%);
-      font-size: 16px;
-      perspective: 1500px;
-      transform-style: preserve-3d;
-      position: relative;
-      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23FF4500" d="M448 0c-17.67 0-32 14.33-32 32v96H304C283.8 128 268.8 142.1 268.8 162.3l-3.3 95.8c0 2.3 .4 4.6 1.1 6.8l28.9 95.8c4.4 14.6 17.4 25.9 33.6 25.9H416c17.67 0 32 14.33 32 32v96c0 17.67-14.33 32-32 32H304c-53.02 0-96-42.98-96-96V288H96c-53.02 0-96-42.98-96-96V128c0-53.02 42.98-96 96-96h352c17.67 0 32-14.33 32-32S465.7 0 448 0z"/></svg>') 16 16, auto;
+      box-sizing: border-box;
     }
-
-    /* Контейнер фоновых анимаций */
-    #background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      overflow: hidden;
-      transform-style: preserve-3d;
-    }
-
-    /* Дополнительный градиентный слой с анимацией параллакса */
-    #background::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 120%;
-      height: 120%;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
-      animation: parallax 60s ease-in-out infinite alternate;
-      transform: translateZ(-300px);
-      z-index: -2;
-    }
-    @keyframes parallax {
-      from { transform: translate(0, 0) translateZ(-300px); }
-      to { transform: translate(-50px, -50px) translateZ(-300px); }
-    }
-
-    /* Canvas для фона */
-    #constellation {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -3;
-      background: transparent;
-    }
-
-    .header {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateZ(100px);
-      background-color: transparent;
-      color: var(--secondary-color);
-      padding: 10px 20px;
-      border-radius: 10px;
+    body {
+      font-family: Arial, sans-serif;
       display: flex;
-      align-items: center;
+      min-height: 100vh;
+      background-color: #f4f6f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    /* Тёмная тема */
+    .dark-theme {
+      background-color: #18191a;
+      color: #e4e6eb;
+    }
+    .dark-theme header h1 { color: #e4e6eb; }
+    .dark-theme .sidebar { background-color: #242526; }
+    .dark-theme .card, .dark-theme th, .dark-theme td {
+      background-color: #242526;
+      color: #e4e6eb;
+      border-color: #444;
+    }
+    .dark-theme th { background-color: #2a2b2e; }
+    
+    /* Сайдбар */
+    .sidebar {
+      background-color: #1c1e21;
+      width: 250px;
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
       font-size: 24px;
-      font-weight: bold;
-      z-index: 3;
-      user-select: none;
-      box-shadow: 0 8px 16px var(--shadow-color);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .header:hover {
-      transform: translateX(-50%) translateZ(140px) rotateX(5deg);
+    .sidebar ul {
+      list-style: none;
     }
-    .header img {
-      width: 350px;
-      height: 60px;
-      margin-right: 10px;
-      pointer-events: none;
-      user-select: none;
-      filter: drop-shadow(0 4px 6px var(--shadow-color));
-      transition: filter 0.3s ease;
+    .sidebar ul li {
+      margin-bottom: 15px;
     }
-    .header img:hover {
-      filter: drop-shadow(0 6px 10px var(--shadow-color));
+    .sidebar ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+      padding: 10px;
+      display: block;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      cursor: pointer;
     }
-
-    .blocks-wrapper {
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background-color: #343a40;
+    }
+    
+    /* Основной контент */
+    .main-content {
+      flex: 1;
+      padding: 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      height: calc(100vh - 80px);
-      position: relative;
-      margin-top: 10%;
-      transform: translateZ(50px);
-      transition: transform 0.4s ease;
-      z-index: 2;
+      margin-bottom: 30px;
     }
-    .background-overlay {
-      position: absolute;
-      background: var(--background-overlay-color);
-      border-radius: 20px;
-      padding: 30px;
-      backdrop-filter: blur(10px); /* эффект стекла */
-      -webkit-backdrop-filter: blur(10px);
-      z-index: 1;
-      width: max-content;
-      box-shadow: 0 16px 32px var(--shadow-color);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      transform-style: preserve-3d;
+    header h1 {
+      font-size: 32px;
     }
-    .background-overlay:hover {
-      transform: translateZ(40px) scale(1.02);
-      box-shadow: 0 20px 40px var(--shadow-color);
+    .theme-toggle {
+      background-color: white;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-
-    .blocks-container {
+    .theme-toggle:hover {
+      background-color: #343a40;
+    }
+    
+    /* Секции */
+    .section { 
+      display: none; 
+      flex: 1;
+      overflow-y: auto;
+    }
+    .section.active { display: block; }
+    /* Для секции настроек при активном состоянии устанавливаем flex-отображение */
+    #settings.active {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Карточки статистики */
+    .stats {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
-      justify-content: center;
-      position: relative;
-      z-index: 2;
-      transform: translateY(2%);
-      transition: transform 0.4s ease;
+      margin-bottom: 30px;
     }
-    .block {
-      position: relative;
-      width: 133px;
-      height: 133px;
-      background: linear-gradient(135deg, #000, #333);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--secondary-color);
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 20px;
-      box-shadow: 0 8px 16px var(--shadow-color);
-      transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      flex: 1;
+      min-width: 250px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
       text-align: center;
-      cursor: pointer;
-      user-select: none;
-      overflow: hidden;
-      transform-style: preserve-3d;
-    }
-    .block:hover {
-      transform: translateY(-12px) translateZ(20px) scale(1.08) rotateX(3deg) rotateY(3deg);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-      background: linear-gradient(135deg, #333, #000);
-    }
-    .block:active {
-      transform: translateY(0) translateZ(10px) scale(0.95);
-      box-shadow: 0 8px 16px var(--shadow-color);
-    }
-    /* Ripple эффект */
-    .block::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 0;
-      height: 0;
-      background: var(--ripple-color);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
-    }
-    .block:active::after {
-      width: 200%;
-      height: 200%;
-      opacity: 0.6;
-      transition: 0s;
-    }
-    /* Подсказки (Tooltips) */
-    .block:hover::before {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: -28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--tooltip-bg);
-      color: var(--tooltip-color);
-      padding: 4px 8px;
-      font-size: 12px;
-      border-radius: 4px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .block:hover::before {
-      opacity: 1;
-    }
-
-    a {
       text-decoration: none;
+      color: inherit;
     }
-
-    /* Медиазапрос для планшетов и мобильных устройств */
-    @media (max-width: 768px) {
-      .header img {
-        width: 250px;
-        height: auto;
-      }
-      .blocks-wrapper {
-        margin-top: 15%;
-      }
-      .block {
-        width: 100px;
-        height: 100px;
-        font-size: 14px;
-      }
-      .background-overlay {
-        padding: 15px;
-        border-radius: 15px;
-      }
-      .blocks-container {
-        gap: 10px;
-      }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
-
-    /* Медиазапрос для мобильных телефонов */
-    @media (max-width: 480px) {
-      .header {
-        font-size: 18px;
-        padding: 8px 16px;
-      }
-      .header img {
-        width: 200px;
-        height: auto;
-      }
-      .blocks-wrapper {
-        margin-top: 20%;
-      }
-      .block {
-        width: 80px;
-        height: 80px;
-        font-size: 12px;
-      }
-      .background-overlay {
-        padding: 10px;
-        border-radius: 10px;
-      }
-      .blocks-container {
-        gap: 5px;
-      }
+    
+    /* Файловый менеджер */
+    .file-manager-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .search-input {
+      padding: 8px;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .file-item a {
+      text-decoration: none;
+      color: #1c1e21;
+    }
+    .favorite-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #ff9800;
+    }
+    .favorite-btn.active {
+      color: #ff5722;
+    }
+    
+    /* Таблицы для сотрудников */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f1f1f1;
+    }
+    
+    /* Стили для чата (только в настройках) */
+    #chatContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-y: auto;
+    }
+    .chat-message {
+      max-width: 80%;
+      border-radius: 5px;
+      padding: 10px;
+      word-wrap: break-word;
+    }
+    .chat-message.user {
+      background-color: #e0f7fa;
+      align-self: flex-end;
+    }
+    .chat-message.ai {
+      background-color: #ffe0b2;
+      align-self: flex-start;
     }
   </style>
 </head>
 <body>
-  <div id="background">
-    <!-- Canvas для сетчатой анимации -->
-    <canvas id="constellation"></canvas>
+  <!-- Сайдбар с навигацией -->
+  <div class="sidebar">
+    <h2>Expert Credit</h2>
+    <ul>
+      <li><a href="#" class="nav-link active" data-section="dashboard">🏠 Дашборд</a></li>
+      <li><a href="#" class="nav-link" data-section="files">📁 Файлы</a></li>
+      <li><a href="#" class="nav-link" data-section="employees">👥 Сотрудники</a></li>
+      <li><a href="#" class="nav-link" data-section="reports">📊 График</a></li>
+      <li><a href="#" class="nav-link" data-section="settings">🤖 Чат с ИИ</a></li>
+    </ul>
   </div>
-
-  <!-- Шапка с логотипом -->
-  <div class="header">
-    <img src="logo-default-480x80.png" alt="Icon">
-  </div>
-
-  <!-- Обертка для фонового контейнера блоков -->
-  <div class="blocks-wrapper">
-    <div class="background-overlay">
-      <div class="blocks-container">
-        <a href="Call_center.html">
-          <div class="block" data-tooltip="Вход для Моп'ам" style="font-size: 14px;">Моп'ам</div>
+  
+  <!-- Основной контент -->
+  <div class="main-content">
+    <header>
+      <h1 id="sectionTitle">Дашборд</h1>
+      <button class="theme-toggle" id="themeToggle"></button>
+    </header>
+    
+    <!-- Секция: Дашборд -->
+    <section id="dashboard" class="section active">
+      <div class="stats">
+        <a class="card" href="balance.html">
+          ☎️ <br><strong>МОП'ам</strong><br>Информация
         </a>
-        <a href="specialist.html">
-          <div class="block" data-tooltip="Вход для Специалистов" style="font-size: 14px;">Специалистам</div>
+        <a class="card" href="transactions.html">
+          👩🏻‍💼👨🏻‍💼 <br><strong>Экспертам</strong><br>Информация
         </a>
-        <a href="baza.html">
-          <div class="block" data-tooltip="Структура компании" style="font-size: 14px;">Структура</div>
+        <a class="card" href="clients.html">
+          ➕➖ <br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
         </a>
-        <a href="files.html">
-          <div class="block" data-tooltip="Работа с файлами" style="font-size: 14px;">Файлы</div>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?pli=1&gid=1126028330#gid=1126028330">
-          <div class="block" data-tooltip="График работы" style="font-size: 14px;">График</div>
-        </a>
-        <a href="otbasy.html">
-          <div class="block" data-tooltip="Otbasy calc" style="font-size: 14px;">Otbasy calc</div>
-        </a>
-	      <a href="pdf.html">
-          <div class="block" data-tooltip="График (PDF)" style="font-size: 14px;">График (PDF)</div>
+        <a class="card" href="clients.html">
+          🏠➕➖ <br><strong>Калькулятор</strong><br>Отбасы
         </a>
       </div>
-    </div>
+	  <br><br>
+      <p align="center">Добро пожаловать в дашборд. Здесь отображаются ключевые показатели банка.</p>
+    </section>
+    
+    <!-- Секция: Файлы (Файловый менеджер) -->
+    <section id="files" class="section">
+      <div class="file-manager-controls">
+        <input type="text" id="fileSearch" class="search-input" placeholder="Поиск файла...">
+        <button id="toggleFavorites">Показать избранное</button>
+      </div>
+      <div id="filesList">
+        <!-- Файлы заполняются JS -->
+      </div>
+    </section>
+    
+    <!-- Секция: Сотрудники -->
+    <section id="employees" class="section">
+      <input type="text" id="employeeSearch" class="search-input" placeholder="Поиск сотрудника...">
+      <table id="employeesTable">
+        <thead>
+          <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Отдел</th>
+            <th>Сотовый номер</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Данные заполняются JS -->
+        </tbody>
+      </table>
+    </section>
+    
+    <!-- Секция: Отчёты -->
+    <section id="reports" class="section">
+      <h2></h2>
+      <iframe src="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?usp=sharing" width="100%" height="800"></iframe>
+      <br><br>
+      <a class="card" href="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?pli=1&gid=1564299646#gid=1564299646">
+        <strong>Развернуть</strong>
+      </a>
+    </section>
+    
+    <!-- Секция: Настройки (Чат с ИИ) -->
+    <section id="settings" class="section">
+      <h2></h2>
+      <div id="chatContainer">
+        <!-- При открытии секции будет выведен минимальный промпт -->
+      </div>
+      <form id="chatForm" style="margin-top: 10px; display: flex;">
+        <input type="text" id="chatInput" placeholder="Введите сообщение..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" required>
+        <button type="submit" style="margin-left: 10px; padding: 10px 20px; border: none; background-color: #1c1e21; color: #fff; border-radius: 5px; cursor: pointer;">Отправить</button>
+      </form>
+    </section>
   </div>
-
+  
   <script>
-    // Проверка статуса входа и перенаправление, если не авторизован
-    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-      window.location.href = "index.html";
-    }
-
-    /* ====== Анимация «созвездного» фона (коннекты между точками) ====== */
-    const canvas = document.getElementById('constellation');
-    const ctx = canvas.getContext('2d');
-
-    // Массив точек
-    let points = [];
-    const POINTS_COUNT = 70;      // количество точек
-    const MAX_DISTANCE = 120;     // максимальная дистанция для соединения линией
-    const SPEED = 0.5;           // скорость движения точек
-	const COLOR_DOT = 'rgba(0, 0, 139, 0.8)';  // Тёмно-синий (darkblue) с небольшой прозрачностью
-	const COLOR_LINE = 'rgba(0, 0, 139, 0.3)'; // Тот же цвет, но с большей прозрачностью для линий
-
-
-    // Адаптация размеров canvas
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    // Инициализация точек
-    function initPoints() {
-      points = [];
-      for (let i = 0; i < POINTS_COUNT; i++) {
-        points.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * SPEED,
-          vy: (Math.random() - 0.5) * SPEED
-        });
+   // Проверка статуса входа и перенаправление, если не авторизован
+      if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = "index.html";
       }
-    }
-
-    // Обновление позиции каждой точки
-    function updatePoints() {
-      for (let i = 0; i < POINTS_COUNT; i++) {
-        const p = points[i];
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Отражение от краёв экрана
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-      }
-    }
-
-    // Рисуем точки и линии
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Рисуем линии между точками, если они достаточно близко
-      for (let i = 0; i < POINTS_COUNT; i++) {
-        for (let j = i + 1; j < POINTS_COUNT; j++) {
-          const p1 = points[i];
-          const p2 = points[j];
-          const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-          if (dist < MAX_DISTANCE) {
-            ctx.strokeStyle = COLOR_LINE;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+    /*******************/
+    /* Переключатель темы */
+    /*******************/
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+    });
+    
+    /*******************/
+    /* Навигация секций */
+    /*******************/
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+    const sectionTitle = document.getElementById('sectionTitle');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        const target = link.getAttribute('data-section');
+        sections.forEach(section => {
+          section.classList.remove('active');
+          if (section.id === target) {
+            section.classList.add('active');
+            sectionTitle.textContent = link.textContent.trim();
+            // Если выбраны настройки, выводим минимальный промпт, если чат пустой
+            if(target === "settings" && document.getElementById('chatContainer').childElementCount === 0){
+              appendMessage('ai', minimalPrompt);
+            }
           }
+        });
+      });
+    });
+    
+    /*******************/
+    /* Секция: Сотрудники */
+    /*******************/
+    const employeesData = [
+      { id: 1, fullName: 'Канат Дарибекович', position: 'Директор', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 2, fullName: 'Канат Имангалиулы', position: 'Главный эксперт', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 3, fullName: 'Жадыра', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 3, fullName: 'Жадыра', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 4, fullName: 'Салтанат Нурбековна', position: 'РОП', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 5, fullName: 'Диана', position: 'SMM', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 6, fullName: 'Ильяр Даниярович', position: 'Тех. отдел', department: 'Филиал', mobile: '+ 7 777 777 77 77' }
+    ];
+    const employeesTableBody = document.querySelector('#employeesTable tbody');
+    function renderEmployees(filter = '') {
+      employeesTableBody.innerHTML = '';
+      const filtered = employeesData.filter(emp =>
+        emp.fullName.toLowerCase().includes(filter.toLowerCase()) ||
+        emp.position.toLowerCase().includes(filter.toLowerCase()) ||
+        emp.department.toLowerCase().includes(filter.toLowerCase()) ||
+        emp.mobile.includes(filter)
+      );
+      filtered.forEach(emp => {
+        employeesTableBody.innerHTML += `
+          <tr>
+            <td>${emp.fullName}</td>
+            <td>${emp.position}</td>
+            <td>${emp.department}</td>
+            <td>${emp.mobile}</td>
+          </tr>
+        `;
+      });
+    }
+    renderEmployees();
+    document.getElementById('employeeSearch').addEventListener('input', (e) => {
+      renderEmployees(e.target.value);
+    });
+    
+    /*******************/
+    /* Секция: Файлы (Файловый менеджер) */
+    /*******************/
+    let filesData = [
+      { id: 1, name: 'Чек лист.pdf', url: 'chek.pdf'},
+      { id: 2, name: 'AMOcrm Обучение.docx', url: 'AmoCRM.docx' },
+      { id: 3, name: 'Путь клиента.xls', url: 'Путь Клиента.xls' },
+		{ id: 4, name: 'Новые ставки.pdf', url: 'новые ставки.pdf' }
+    ];
+    const FAVORITES_KEY = 'favoriteFiles';
+    function getFavoriteFiles() {
+      const favs = localStorage.getItem(FAVORITES_KEY);
+      return favs ? JSON.parse(favs) : [];
+    }
+    function setFavoriteFiles(favs) {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+    }
+    let favoriteFiles = getFavoriteFiles();
+    const filesList = document.getElementById('filesList');
+    let showFavoritesOnly = false;
+    function renderFiles(filter = '') {
+      filesList.innerHTML = '';
+      let filteredFiles = filesData.filter(file =>
+        file.name.toLowerCase().includes(filter.toLowerCase())
+      );
+      if (showFavoritesOnly) {
+        filteredFiles = filteredFiles.filter(file => favoriteFiles.includes(file.id));
+      }
+      filteredFiles.forEach(file => {
+        const isFav = favoriteFiles.includes(file.id);
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('file-item');
+        fileItem.innerHTML = `
+          <span><a href="${file.url}" download>${file.name}</a></span>
+          <button class="favorite-btn ${isFav ? 'active' : ''}" data-id="${file.id}">&#9733;</button>
+        `;
+        filesList.appendChild(fileItem);
+      });
+    }
+    renderFiles();
+    document.getElementById('fileSearch').addEventListener('input', (e) => {
+      renderFiles(e.target.value);
+    });
+    document.getElementById('toggleFavorites').addEventListener('click', () => {
+      showFavoritesOnly = !showFavoritesOnly;
+      document.getElementById('toggleFavorites').textContent = showFavoritesOnly ? 'Показать все файлы' : 'Показать избранное';
+      renderFiles(document.getElementById('fileSearch').value);
+    });
+    filesList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('favorite-btn')) {
+        const fileId = parseInt(e.target.getAttribute('data-id'));
+        if (favoriteFiles.includes(fileId)) {
+          favoriteFiles = favoriteFiles.filter(id => id !== fileId);
+          e.target.classList.remove('active');
+        } else {
+          favoriteFiles.push(fileId);
+          e.target.classList.add('active');
+        }
+        setFavoriteFiles(favoriteFiles);
+        if (showFavoritesOnly) {
+          renderFiles(document.getElementById('fileSearch').value);
         }
       }
+    });
+    
+    /*******************/
+    /* Секция: Чат с ИИ (настройки) */
+    /*******************/
+    // Минимальный промпт для ИИ
+    const minimalPrompt = "Хэй, привеееет! Задай мне свой вопрос и я постараюсь ответить тебе ))";
+    
+    // Вставьте сюда ваш API-ключ от OpenAI
+    
+	const part1 = "sk-proj--epHKZsTAVdhTN_Y7VLXfvTGdHIYei";
+	        const part2 = "_C3x9MGy4Yt7nMqsaFKFAex7qVrIzCL9fn09zK5gER9";
+	        const part3 = "MT3BlbkFJ3gXzYqMRG5JDSI1SLoHADZVb240NTP3Q";
+	        const part4 = "AwuyW3aaZ2R4Sn5DYp07OwG6aGfuRwml2CthKnH_IA";
 
-      // Рисуем точки
-      for (let i = 0; i < POINTS_COUNT; i++) {
-        ctx.fillStyle = COLOR_DOT;
-        ctx.beginPath();
-        ctx.arc(points[i].x, points[i].y, 2, 0, 2 * Math.PI);
-        ctx.fill();
+	        const API_KEY = part1 + part2 + part3 + part4;
+	
+    // Функция для добавления сообщений в чат
+    function appendMessage(sender, text) {
+      const chatContainer = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message', sender);
+      messageDiv.textContent = text;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Обработка отправки сообщения
+    document.getElementById('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      // Вывод сообщения пользователя
+      appendMessage('user', message);
+      input.value = '';
+      
+      // Запрос к API OpenAI для получения ответа от GPT-3.5-turbo
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "Ты AI-ассистент Expert Credit. Отвечай креативно и эмоционально, используя современный стиль общения. Максимально 3 предложения. Поддерживай дружеский тон с элементами профессиональной консультации. Используй смайлики под контекст сообщения которое ты отправляешь. Смайлики должны быть в каждом сообщении" },
+              { role: "user", content: message }
+            ]
+          })
+        });
+        const data = await response.json();
+        const aiMessage = data.choices && data.choices[0] && data.choices[0].message
+          ? data.choices[0].message.content.trim()
+          : "Извините, произошла ошибка.";
+        appendMessage('ai', aiMessage);
+      } catch (error) {
+        console.error("Ошибка обращения к API:", error);
+        appendMessage('ai', "Произошла ошибка при обращении к API.");
       }
-    }
-
-    // Анимационный цикл
-    function animate() {
-      requestAnimationFrame(animate);
-      updatePoints();
-      draw();
-    }
-
-    // Инициализация и запуск
-    initPoints();
-    animate();
+    });
+    
+    // Если сразу открыты настройки, выводим минимальный промпт
+    window.addEventListener('load', () => {
+      const settingsSection = document.getElementById('settings');
+      if (settingsSection.classList.contains('active') && document.getElementById('chatContainer').childElementCount === 0) {
+        appendMessage('ai', minimalPrompt);
+      }
+    });
   </script>
 </body>
 </html>
