@@ -211,18 +211,64 @@
       background-color: #ffe0b2;
       align-self: flex-start;
     }
+	
+	.password-modal {
+	            display: none;
+	            position: fixed;
+	            top: 50%;
+	            left: 50%;
+	            transform: translate(-50%, -50%);
+	            background: white;
+	            padding: 20px;
+	            border-radius: 5px;
+	            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	            z-index: 1000;
+	        }
+        
+	        .password-toggle {
+	            margin-top: 10px;
+	            display: flex;
+	            align-items: center;
+	            gap: 5px;
+	        }
+        
+	        .overlay {
+	            display: none;
+	            position: fixed;
+	            top: 0;
+	            left: 0;
+	            width: 100%;
+	            height: 100%;
+	            background: rgba(0,0,0,0.5);
+	            z-index: 999;
+	        }
   </style>
+  <script>
+	  function openLink(url) {
+	            let password = prompt("Введите пароль:");
+	            let correctPassword = "1234"; // Замените на свой пароль
+
+	            if (password === correctPassword) {
+	                window.open(url, "_blank"); // Открывает в новой вкладке
+	            } else {
+	                alert("Неверный пароль! Доступ запрещён.");
+	            }
+	            return false; // Блокирует переход по ссылке
+	        }
+			
+      </script>
 </head>
 <body>
   <!-- Сайдбар с навигацией -->
   <div class="sidebar">
-    <h2>Expert Credit</h2>
+    <h2 align="center">Expert Credit</h2>
+  <hr>
     <ul>
-      <li><a href="#" class="nav-link active" data-section="dashboard">🏠 Главная</a></li>
-      <li><a href="#" class="nav-link" data-section="files">📁 Файлы</a></li>
-      <li><a href="#" class="nav-link" data-section="employees">👥 Сотрудники</a></li>
-      <li><a href="#" class="nav-link" data-section="reports">📊 График</a></li>
-      <li><a href="#" class="nav-link" data-section="settings">🤖 Чат с ИИ</a></li>
+      <li><a href="#" class="nav-link active" data-section="dashboard">🏠 &nbsp;&nbsp;&nbsp;&nbsp;Главная</a></li>
+      <li><a href="#" class="nav-link" data-section="files">📁 &nbsp;&nbsp;&nbsp;&nbsp;Файлы</a></li>
+      <li><a href="#" class="nav-link" data-section="employees">👥 &nbsp;&nbsp;&nbsp;&nbsp;Сотрудники</a></li>
+      <li><a href="#" class="nav-link" data-section="reports">📊 &nbsp;&nbsp;&nbsp;&nbsp;График</a></li>
+      <li><a href="#" class="nav-link" data-section="settings">🤖 &nbsp;&nbsp;&nbsp;&nbsp;Чат с ИИ</a></li>
     </ul>
   </div>
   
@@ -235,22 +281,53 @@
     
     <!-- Секция: Дашборд -->
     <section id="dashboard" class="section active">
+        <p align="center">Добро пожаловать в Dashboard. Здесь отображается ключевая информация компании.</p>
+		<br><br>
       <div class="stats">
         <a class="card" href="Call_center.html">
-          ☎️ <br><strong>МОП'ам</strong><br>Информация
+          ☎️ <br><br><strong>МОП'ам</strong><br>Информация
         </a>
         <a class="card" href="specialist.html">
-          👩🏻‍💼👨🏻‍💼 <br><strong>Экспертам</strong><br>Информация
+          👩🏻‍💼👨🏻‍💼 <br><br><strong>Экспертам</strong><br>Информация
         </a>
         <a class="card" href="pdf.html">
-          ➕➖ <br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
+          📱➕➖ <br><br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
         </a>
         <a class="card" href="otbasy.html">
-          🏠➕➖ <br><strong>Калькулятор</strong><br>Отбасы
+          🏠➕➖ <br><br><strong>Калькулятор</strong><br>Отбасы
         </a>
+		<br> 
       </div>
+	  <br><br><br><br>
+	  <br><br><br><br>
+      <div class="stats">
+        <a class="card" href="https://expertcredit.amocrm.ru/todo/line/" target="_blank">
+          💻 <br><br><strong>AMOcrm</strong><br>Открыть
+        </a>
+    <a class="card" href="https://docs.google.com/spreadsheets/d/1NN0HUhRmGcUBhoqrCeVqpK2Fc6gaue98/edit?gid=19003384#gid=19003384" onclick="return openLink(this.href)">
+           📑 <br><br><strong>Управленческая отчетность</strong><br>Открыть
+       </a>
+	   <div class="overlay" id="overlay"></div>
+	       <div class="password-modal" id="passwordModal">
+	           <input type="password" id="passwordInput" placeholder="Введите пароль">
+	           <div class="password-toggle">
+	               <input type="checkbox" id="showPassword" onchange="togglePassword()">
+	               <label for="showPassword">Показать пароль</label>
+	           </div>
+	           <div style="margin-top: 15px;">
+	               <button onclick="submitPassword()">OK</button>
+	               <button onclick="cancelPassword()">Отмена</button>
+	           </div>
+	       </div>
+	   
+	   
+	   
+	    <a class="card" href="https://docs.google.com/spreadsheets/d/1RZTBmn4TxGOOoHf5oFnf-mq-TqBjXdjn1Ub4BMJmSbo/edit?gid=799242097#gid=799242097" onclick="return openLink(this.href)">
+	           📑 <br><br><strong>Финансовый отчет</strong><br>Открыть
+	       </a>
+	</div>
+	  <br>
 	  <br><br>
-      <p align="center">Добро пожаловать в Dashboard. Здесь отображается ключевая информация компании.</p>
     </section>
     
     <!-- Секция: Файлы (Файловый менеджер) -->
@@ -290,7 +367,7 @@
       <a class="card" href="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?pli=1&gid=1564299646#gid=1564299646" target="_blank">
         <strong>Развернуть</strong>
       </a>
-      <a class="card" href="https://meet.google.com/landing?pli=1" target="_blank">
+      <a class="card" href="https://meet.google.com/landing?pli=1">
         <strong>Online-встреча</strong>
       </a>
     </section>
@@ -309,6 +386,44 @@
   </div>
   
   <script>
+	let correctPassword = "1234"; // Ваш пароль
+	        let currentUrl = '';
+	        let passwordModal = document.getElementById('passwordModal');
+	        let overlay = document.getElementById('overlay');
+
+	        function openLink(url) {
+	            currentUrl = url;
+	            passwordModal.style.display = 'block';
+	            overlay.style.display = 'block';
+	            return false;
+	        }
+
+	        function togglePassword() {
+	            let passwordInput = document.getElementById('passwordInput');
+	            passwordInput.type = document.getElementById('showPassword').checked ? 'text' : 'password';
+	        }
+
+	        function submitPassword() {
+	            let password = document.getElementById('passwordInput').value;
+	            if(password === correctPassword) {
+	                window.open(currentUrl, "_blank");
+	            } else {
+	                alert("Неверный пароль! Доступ запрещён.");
+	            }
+	            closeModal();
+	        }
+
+	        function cancelPassword() {
+	            closeModal();
+	        }
+
+	        function closeModal() {
+	            passwordModal.style.display = 'none';
+	            overlay.style.display = 'none';
+	            document.getElementById('passwordInput').value = '';
+	            document.getElementById('showPassword').checked = false;
+	            togglePassword();
+	        }
    // Проверка статуса входа и перенаправление, если не авторизован
       if (sessionStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = "index.html";
