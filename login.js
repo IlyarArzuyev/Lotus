@@ -1,37 +1,35 @@
-// Функция для декодирования base64
-function decodeBase64(str) {
-  return atob(str);
+// Функция для шифрования данных
+function encryptData(data, secretKey) {
+  return CryptoJS.AES.encrypt(data, secretKey).toString();
 }
 
-// Логика авторизации с кодированными логинами и паролями
+// Функция для дешифрования данных
+function decryptData(encryptedData, secretKey) {
+  const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
+
+// Логика авторизации с шифрованием
 function login() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  // Пример логинов и паролей в base64
-  const users = [
-    { username: "admin", password: "Expert1234", redirect: "main.html" },
-    { username: "manager", password: "Manager1234", redirect: "manager-dashboard.html" },
-    { username: "guest", password: "Guest1234", redirect: "guest-home.html" }
-  ];
+  // Ключ для шифрования (можно использовать более сложный)
+  const secretKey = 'mySecretKey';
 
-  // Преобразуем логины и пароли в base64
-  const encodedUsers = users.map(user => ({
-    username: btoa(user.username),
-    password: btoa(user.password),
-    redirect: user.redirect
-  }));
+  // Шифруем логин и пароль
+  const encryptedUsername = encryptData(username, secretKey);
+  const encryptedPassword = encryptData(password, secretKey);
 
-  const encodedUsername = btoa(username);
-  const encodedPassword = btoa(password);
+  // Пример хардкодированных шифрованных данных для логинов и паролей
+  const validUsername = encryptData('admin', secretKey);
+  const validPassword = encryptData('Expert1234', secretKey);
 
-  const user = encodedUsers.find(u => u.username === encodedUsername && u.password === encodedPassword);
-
-  if (user) {
+  if (encryptedUsername === validUsername && encryptedPassword === validPassword) {
     // Сохранение статуса входа в sessionStorage
     sessionStorage.setItem('isLoggedIn', 'true');
-    // Перенаправление на соответствующую страницу
-    window.location.href = user.redirect;
+    // Перенаправление на нужную страницу
+    window.location.href = "main.html";
   } else {
     document.getElementById('error-message').style.display = 'block';
   }
