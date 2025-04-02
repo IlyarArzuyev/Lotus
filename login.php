@@ -10,7 +10,7 @@ $users = [
 
 // Список редиректов
 $redirects = [
-    "user1" => "main.html",
+    "user1" => "https://ilyararzuyev.github.io/Lotus/main.html",
     "user2" => "calc.html",
     "user3" => "page3.html",
 ];
