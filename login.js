@@ -1,102 +1,36 @@
-// Инициализация частиц
-particlesJS('particles-js', {
-  "particles": {
-    "number": {
-      "value": 80,
-      "density": {
-        "enable": true,
-        "value_area": 700
-      }
-    },
-    "color": {
-      "value": "#FF4500"
-    },
-    "shape": {
-      "type": "circle",
-      "stroke": {
-        "width": 0,
-        "color": "#000000"
-      },
-      "polygon": {
-        "nb_sides": 5
-      }
-    },
-    "opacity": {
-      "value": 0.5,
-      "random": false,
-      "anim": {
-        "enable": false,
-        "speed": 1,
-        "opacity_min": 0.1,
-        "sync": false
-      }
-    },
-    "size": {
-      "value": 3,
-      "random": true,
-      "anim": {
-        "enable": false,
-        "speed": 40,
-        "size_min": 0.1,
-        "sync": false
-      }
-    },
-    "line_linked": {
-      "enable": false,
-      "distance": 150,
-      "color": "#ffffff",
-      "opacity": 0.4,
-      "width": 1
-    },
-    "move": {
-      "enable": true,
-      "speed": 2,
-      "direction": "none",
-      "random": false,
-      "straight": false,
-      "out_mode": "out",
-      "bounce": false,
-      "attract": {
-        "enable": false,
-        "rotateX": 600,
-        "rotateY": 1200
-      }
-    }
-  },
-  "interactivity": {
-    "detect_on": "canvas",
-    "events": {
-      "onhover": {
-        "enable": true,
-        "mode": "repulse"
-      },
-      "onclick": {
-        "enable": true,
-        "mode": "push"
-      },
-      "resize": true
-    }
-  },
-  "retina_detect": true
-});
+// Функция для декодирования base64
+function decodeBase64(str) {
+  return atob(str);
+}
 
-// Логика авторизации с тремя вариантами
+// Логика авторизации с кодированными логинами и паролями
 function login() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
+  // Пример логинов и паролей в base64
   const users = [
     { username: "admin", password: "Expert1234", redirect: "main.html" },
-    { username: "manager", password: "Manager1234", redirect: "files.html" },
-    { username: "guest", password: "Guest1234", redirect: "baza.html" }
+    { username: "manager", password: "Manager1234", redirect: "manager-dashboard.html" },
+    { username: "guest", password: "Guest1234", redirect: "guest-home.html" }
   ];
 
-  const user = users.find(u => u.username === username && u.password === password);
+  // Преобразуем логины и пароли в base64
+  const encodedUsers = users.map(user => ({
+    username: btoa(user.username),
+    password: btoa(user.password),
+    redirect: user.redirect
+  }));
+
+  const encodedUsername = btoa(username);
+  const encodedPassword = btoa(password);
+
+  const user = encodedUsers.find(u => u.username === encodedUsername && u.password === encodedPassword);
 
   if (user) {
     // Сохранение статуса входа в sessionStorage
     sessionStorage.setItem('isLoggedIn', 'true');
-    // Перенаправление на страницу соответствующую пользователю
+    // Перенаправление на соответствующую страницу
     window.location.href = user.redirect;
   } else {
     document.getElementById('error-message').style.display = 'block';
