@@ -134,7 +134,7 @@
 <body>
   <div id="particles-js"></div>
   <div class="login-container">
-    <h2 class="login-title">Вход в систему</h2>
+    <h2 class="login-title">Вхsд в систему</h2>
     <div class="login-form">
       <input type="text" id="username" placeholder="Логин">
       <input type="password" id="password" placeholder="Пароль">
@@ -145,17 +145,15 @@
     <img src="logo-default-480x80.png" alt="Logo">
   </div>
 
-  <!-- Подключаем particles.js -->
+  <!-- Подключение particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     // Инициализация частиц
     particlesJS('particles-js', {
       "particles": {
         "number": {
           "value": 80,
-          "density": {
-            "enable": true,
-            "value_area": 700
-          }
+          "density": { "enable": true, "value_area": 700 }
         },
         "color": { "value": "#FF4500" },
         "shape": {
@@ -194,25 +192,36 @@
       "retina_detect": true
     });
 
+    // Скрытие сообщения об ошибке при вводе
+    document.getElementById('username').addEventListener('input', () => {
+      document.getElementById('error-message').style.display = 'none';
+    });
+    document.getElementById('password').addEventListener('input', () => {
+      document.getElementById('error-message').style.display = 'none';
+    });
+
     // Функция авторизации
-	function login() {
-	  const username = document.getElementById('username').value;
-	  const password = document.getElementById('password').value;
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
-	  const scriptURL = "https://script.google.com/macros/s/AKfycbxjVv_8NEInYu0Fbh8qlC9r4lD1OCPJdmTITVTsW8Dvy8Kxgs0KpYZSt1J3Rv5oLXOD/exec";//Ссылка на Google Apps Script
+      const scriptURL = "https://script.google.com/macros/s/AKfycbxjVv_8NEInYu0Fbh8qlC9r4lD1OCPJdmTITVTsW8Dvy8Kxgs0KpYZSt1J3Rv5oLXOD/exec"; // Ссылка на Google Apps Script
 
-	  fetch(`${scriptURL}?username=${username}&password=${password}`)
-	    .then(response => response.text())
-	    .then(url => {
-	      if (url !== "error") {
-	        window.location.href = url; // Перенаправление на нужную ссылку
-	      } else {
-	        document.getElementById('error-message').style.display = 'block';
-	      }
-	    })
-	    .catch(error => console.error("Ошибка запроса:", error));
-	}
-	
+      fetch(`${scriptURL}?username=${username}&password=${password}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = data.url; // Перенаправление на нужную ссылку
+          } else {
+            document.getElementById('error-message').style.display = 'block';
+          }
+        })
+        .catch(error => {
+          console.error("Ошибка запроса:", error);
+          document.getElementById('error-message').style.display = 'block';
+          document.getElementById('error-message').textContent = 'Ошибка подключения к серверу';
+        });
+    }
   </script>
 </body>
 </html>
