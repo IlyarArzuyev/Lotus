@@ -16,7 +16,6 @@
       align-items: center;
       position: relative;
     }
-
     #particles-js {
       position: absolute;
       top: 0;
@@ -25,18 +24,16 @@
       height: 100%;
       z-index: -1;
     }
-
     .login-container {
-      background: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон */
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       padding: 30px;
       max-width: 400px;
       width: 100%;
       text-align: center;
-      backdrop-filter: blur(10px); /* Размытие фона */
-      animation: popIn 0.8s forwards; /* Анимация появления */
+      backdrop-filter: blur(10px);
+      animation: popIn 0.8s forwards;
     }
-
     @keyframes popIn {
       from {
         opacity: 0;
@@ -47,15 +44,12 @@
         transform: scale(1);
       }
     }
-
     .login-title {
-      color: #FF4500; /* Оранжевый цвет заголовка */
+      color: #FF4500;
       font-size: 28px;
       margin-bottom: 20px;
-      position: relative;
-      animation: fadeInTitle 1s ease-in-out; /* Анимация заголовка */
+      animation: fadeInTitle 1s ease-in-out;
     }
-
     @keyframes fadeInTitle {
       from {
         opacity: 0;
@@ -66,25 +60,22 @@
         transform: translateY(0);
       }
     }
-
     .login-form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-
     .login-form input {
-      background: #003366; /* Темно-синий фон для инпутов */
-      border: 2px solid #FF4500; /* Оранжевые границы */
+      background: #003366;
+      border: 2px solid #FF4500;
       border-radius: 8px;
-      color: #FFFFFF; /* Белый текст */
+      color: #FFFFFF;
       padding: 12px;
       font-size: 16px;
       outline: none;
       transition: all 0.3s ease;
-      animation: fadeInInput 1s ease-in-out; /* Анимация инпутов */
+      animation: fadeInInput 1s ease-in-out;
     }
-
     @keyframes fadeInInput {
       from {
         opacity: 0;
@@ -95,37 +86,16 @@
         transform: translateY(0);
       }
     }
-
     .login-form input::placeholder {
-      color: rgba(255, 255, 255, 0.7); /* Светлый текст плейсхолдера */
+      color: rgba(255, 255, 255, 0.7);
       font-style: italic;
     }
-
     .login-form input:focus {
-      border-color: #FF6347; /* Более светлый оранжевый при фокусе */
+      border-color: #FF6347;
       box-shadow: 0 0 8px rgba(255, 99, 71, 0.5);
     }
-
-    .login-form input::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-      background: radial-gradient(circle at top left, rgba(255, 99, 71, 0.2), transparent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-
-    .login-form input:focus::before {
-      transform: scaleX(1);
-    }
-
     .login-form button {
-      background: #FF4500; /* Оранжевый фон кнопки */
+      background: #FF4500;
       border: none;
       border-radius: 8px;
       color: #FFFFFF;
@@ -133,9 +103,8 @@
       font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
-      animation: fadeInButton 1s ease-in-out; /* Анимация кнопки */
+      animation: fadeInButton 1s ease-in-out;
     }
-
     @keyframes fadeInButton {
       from {
         opacity: 0;
@@ -146,28 +115,19 @@
         transform: translateY(0);
       }
     }
-
     .login-form button:hover {
-      background: #FF6347; /* Более светлый оранжевый при наведении */
+      background: #FF6347;
       transform: scale(1.05);
     }
-
     .login-container img {
-        width: 200px;
-        height: auto;
-      }
-
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
+      width: 200px;
+      height: auto;
     }
-
     #error-message {
-      color: #FF6347; /* Оранжевый цвет ошибки */
+      color: #FF6347;
       margin-top: 20px;
       font-size: 14px;
-      display: none; /* Изначально скрыто */
+      display: none;
     }
   </style>
 </head>
@@ -180,11 +140,12 @@
       <input type="password" id="password" placeholder="Пароль">
       <button onclick="login()">Войти</button>
       <p id="error-message">Неверный логин или пароль</p>
-    </div><br><br>
+    </div>
+    <br><br>
     <img src="logo-default-480x80.png" alt="Logo">
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- Подключаем particles.js -->
   <script>
     // Инициализация частиц
     particlesJS('particles-js', {
@@ -196,95 +157,62 @@
             "value_area": 700
           }
         },
-        "color": {
-          "value": "#FF4500"
-        },
+        "color": { "value": "#FF4500" },
         "shape": {
           "type": "circle",
-          "stroke": {
-            "width": 0,
-            "color": "#000000"
-          },
-          "polygon": {
-            "nb_sides": 5
-          }
+          "stroke": { "width": 0, "color": "#000000" },
+          "polygon": { "nb_sides": 5 }
         },
         "opacity": {
           "value": 0.5,
           "random": false,
-          "anim": {
-            "enable": false,
-            "speed": 1,
-            "opacity_min": 0.1,
-            "sync": false
-          }
+          "anim": { "enable": false }
         },
         "size": {
           "value": 3,
           "random": true,
-          "anim": {
-            "enable": false,
-            "speed": 40,
-            "size_min": 0.1,
-            "sync": false
-          }
+          "anim": { "enable": false }
         },
-        "line_linked": {
-          "enable": false,
-          "distance": 150,
-          "color": "#ffffff",
-          "opacity": 0.4,
-          "width": 1
-        },
+        "line_linked": { "enable": false },
         "move": {
           "enable": true,
           "speed": 2,
           "direction": "none",
           "random": false,
           "straight": false,
-          "out_mode": "out",
-          "bounce": false,
-          "attract": {
-            "enable": false,
-            "rotateX": 600,
-            "rotateY": 1200
-          }
+          "out_mode": "out"
         }
       },
       "interactivity": {
         "detect_on": "canvas",
         "events": {
-          "onhover": {
-            "enable": true,
-            "mode": "repulse"
-          },
-          "onclick": {
-            "enable": true,
-            "mode": "push"
-          },
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": true, "mode": "push" },
           "resize": true
         }
       },
       "retina_detect": true
     });
 
-    // Логика авторизации
-    function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+    // Функция авторизации
+	function login() {
+	  const username = document.getElementById('username').value;
+	  const password = document.getElementById('password').value;
 
-      const validUsername = "admin";  // Логин
-      const validPassword = "Expert1234";   // Пароль
+	  const scriptURL = "https://script.google.com/macros/s/AKfycbxjVv_8NEInYu0Fbh8qlC9r4lD1OCPJdmTITVTsW8Dvy8Kxgs0KpYZSt1J3Rv5oLXOD/exec";//Ссылка на Google Apps Script
 
-      if (username === validUsername && password === validPassword) {
-        // Сохранение статуса входа в sessionStorage
-        sessionStorage.setItem('isLoggedIn', 'true');
-        // Перенаправление на первую страницу после входа
-        window.location.href = "main.html";
-      } else {
-        document.getElementById('error-message').style.display = 'block';
-      }
-    }
+	  fetch(`${scriptURL}?username=${username}&password=${password}`)
+	    .then(response => response.text())
+	    .then(url => {
+	      if (url !== "error") {
+	        window.location.href = url; // Перенаправление на нужную ссылку
+	      } else {
+	        document.getElementById('error-message').style.display = 'block';
+	      }
+	    })
+	    .catch(error => console.error("Ошибка запроса:", error));
+	}
+	
   </script>
 </body>
 </html>
