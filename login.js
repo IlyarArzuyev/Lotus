@@ -10,9 +10,8 @@ function login() {
 
   // Пример логинов и паролей в base64
   const users = [
-    { username: "admin", password: "Expert1234", redirect: "main.html" },
-    { username: "manager", password: "Manager1234", redirect: "manager-dashboard.html" },
-    { username: "guest", password: "Guest1234", redirect: "guest-home.html" }
+    { username: "admin", password: "Expert1234", redirect: "home.html" },
+    { username: "Expert", password: "Avenue2025", redirect: "main.html" }
   ];
 
   // Преобразуем логины и пароли в base64
