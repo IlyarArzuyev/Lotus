@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Expert Credit</title>
+  <style>
+    /* Базовый сброс и стили */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      background-color: #f4f6f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    /* Тёмная тема */
+    .dark-theme {
+      background-color: #18191a;
+      color: #e4e6eb;
+    }
+    .dark-theme header h1 { color: #e4e6eb; }
+    .dark-theme .sidebar { background-color: #242526; }
+    .dark-theme .card, .dark-theme th, .dark-theme td {
+      background-color: #242526;
+      color: #e4e6eb;
+      border-color: #444;
+    }
+    .dark-theme th { background-color: #2a2b2e; }
+    
+    /* Сайдбар */
+    .sidebar {
+      background-color: #1c1e21;
+      width: 250px;
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      margin-bottom: 15px;
+    }
+    .sidebar ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+      padding: 10px;
+      display: block;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background-color: #343a40;
+    }
+    
+    /* Основной контент */
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    header h1 {
+      font-size: 32px;
+    }
+    .theme-toggle {
+      background-color: white;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .theme-toggle:hover {
+      background-color: #343a40;
+    }
+    
+    /* Секции */
+    .section { 
+      display: none; 
+      flex: 1;
+      overflow-y: auto;
+    }
+    .section.active { display: block; }
+    /* Для секции настроек при активном состоянии устанавливаем flex-отображение */
+    #settings.active {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Карточки статистики */
+    .stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      flex: 1;
+      min-width: 250px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    /* Файловый менеджер */
+    .file-manager-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .search-input {
+      padding: 8px;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .file-item a {
+      text-decoration: none;
+      color: #1c1e21;
+    }
+    .favorite-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #ff9800;
+    }
+    .favorite-btn.active {
+      color: #ff5722;
+    }
+    
+    /* Таблицы для сотрудников */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f1f1f1;
+    }
+    
+    /* Стили для чата (только в настройках) */
+    #chatContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-y: auto;
+    }
+    .chat-message {
+      max-width: 80%;
+      border-radius: 5px;
+      padding: 10px;
+      word-wrap: break-word;
+    }
+    .chat-message.user {
+      background-color: #e0f7fa;
+      align-self: flex-end;
+    }
+    .chat-message.ai {
+      background-color: #ffe0b2;
+      align-self: flex-start;
+    }
+	
+	.password-modal {
+	            display: none;
+	            position: fixed;
+	            top: 50%;
+	            left: 50%;
+	            transform: translate(-50%, -50%);
+	            background: white;
+	            padding: 20px;
+	            border-radius: 5px;
+	            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	            z-index: 1000;
+	        }
+        
+	        .password-toggle {
+	            margin-top: 10px;
+	            display: flex;
+	            align-items: center;
+	            gap: 5px;
+	        }
+        
+	        .overlay {
+	            display: none;
+	            position: fixed;
+	            top: 0;
+	            left: 0;
+	            width: 100%;
+	            height: 100%;
+	            background: rgba(0,0,0,0.5);
+	            z-index: 999;
+	        }
+  </style>
+  <script>
+	  function openLink(url) {
+	            let password = prompt("Введите пароль:");
+	            let correctPassword = "1234"; // Замените на свой пароль
+
+	            if (password === correctPassword) {
+	                window.open(url, "_blank"); // Открывает в новой вкладке
+	            } else {
+	                alert("Неверный пароль! Доступ запрещён.");
+	            }
+	            return false; // Блокирует переход по ссылке
+	        }
+			
+      </script>
+</head>
+<body>
+  <!-- Сайдбар с навигацией -->
+  <div class="sidebar">
+    <h2 align="center">Expert Credit</h2>
+  <hr>
+    <ul>
+      <li><a href="#" class="nav-link active" data-section="dashboard">🏠 &nbsp;&nbsp;&nbsp;&nbsp;Главная</a></li>
+      <li><a href="#" class="nav-link" data-section="files">📁 &nbsp;&nbsp;&nbsp;&nbsp;Файлы</a></li>
+      <li><a href="#" class="nav-link" data-section="employees">👥 &nbsp;&nbsp;&nbsp;&nbsp;Сотрудники</a></li>
+      <li><a href="#" class="nav-link" data-section="reports">📊 &nbsp;&nbsp;&nbsp;&nbsp;График</a></li>
+      <li><a href="#" class="nav-link" data-section="settings">🤖 &nbsp;&nbsp;&nbsp;&nbsp;Чат с ИИ</a></li>
+    </ul>
+  </div>
+  
+  <!-- Основной контент -->
+  <div class="main-content">
+    <header>
+      <h1 id="sectionTitle">Главная</h1>
+      <button class="theme-toggle" id="themeToggle"></button>
+    </header>
+    
+    <!-- Секция: Дашборд -->
+    <section id="dashboard" class="section active">
+        <p align="center">Добро пожаловать в Dashboard. Здесь отображается ключевая информация компании.</p>
+		<br><br>
+      <div class="stats">
+        <a class="card" href="Call_center.html">
+          ☎️ <br><br><strong>МОП'ам</strong><br>Информация
+        </a>
+        <a class="card" href="specialist.html">
+          👩🏻‍💼👨🏻‍💼 <br><br><strong>Экспертам</strong><br>Информация
+        </a>
+        <a class="card" href="pdf.html">
+          📱➕➖ <br><br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
+        </a>
+        <a class="card" href="otbasy.html">
+          🏠➕➖ <br><br><strong>Калькулятор</strong><br>Отбасы
+        </a>
+		<br> 
+      </div>
+	  <br><br><br><br>
+	  <br><br><br><br>
+      <div class="stats">
+        <a class="card" href="https://expertcredit.amocrm.ru/todo/line/" target="_blank">
+          💻 <br><br><strong>AMOcrm</strong><br>Открыть
+        </a>
+	</div>
+	  <br>
+	  <br><br>
+    </section>
+    
+    <!-- Секция: Файлы (Файловый менеджер) -->
+    <section id="files" class="section">
+      <div class="file-manager-controls">
+        <input type="text" id="fileSearch" class="search-input" placeholder="Поиск файла...">
+        <button id="toggleFavorites">Показать избранное</button>
+      </div>
+      <div id="filesList">
+        <!-- Файлы заполняются JS -->
+      </div>
+    </section>
+    
+    <!-- Секция: Сотрудники -->
+    <section id="employees" class="section">
+      <input type="text" id="employeeSearch" class="search-input" placeholder="Поиск сотрудника...">
+      <table id="employeesTable">
+        <thead>
+          <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Отдел</th>
+            <th>Сотовый номер</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Данные заполняются JS -->
+        </tbody>
+      </table>
+    </section>
+    
+    <!-- Секция: Отчёты -->
+    <section id="reports" class="section">
+      <h2></h2>
+      <iframe src="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?usp=sharing" width="100%" height="800"></iframe>
+      <br><br>
+      <a class="card" href="https://docs.google.com/spreadsheets/d/1174R6jPHDq2i1piz7F2vHfhwx4cfn4BhJ0pvwA2G3U8/edit?pli=1&gid=1564299646#gid=1564299646" target="_blank">
+        <strong>Развернуть</strong>
+      </a>
+      <a class="card" href="https://meet.google.com/landing?pli=1">
+        <strong>Online-встреча</strong>
+      </a>
+    </section>
+    
+    <!-- Секция: Настройки (Чат с ИИ) -->
+    <section id="settings" class="section">
+      <h2></h2>
+      <div id="chatContainer">
+        <!-- При открытии секции будет выведен минимальный промпт -->
+      </div>
+      <form id="chatForm" style="margin-top: 10px; display: flex;">
+        <input type="text" id="chatInput" placeholder="Введите сообщение..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" required>
+        <button type="submit" style="margin-left: 10px; padding: 10px 20px; border: none; background-color: #1c1e21; color: #fff; border-radius: 5px; cursor: pointer;">Отправить</button>
+      </form>
+    </section>
+  </div>
+  
+  <script>
+	let correctPassword = "1234"; // Ваш пароль
+	        let currentUrl = '';
+	        let passwordModal = document.getElementById('passwordModal');
+	        let overlay = document.getElementById('overlay');
+
+	        function openLink(url) {
+	            currentUrl = url;
+	            passwordModal.style.display = 'block';
+	            overlay.style.display = 'block';
+	            return false;
+	        }
+
+	        function togglePassword() {
+	            let passwordInput = document.getElementById('passwordInput');
+	            passwordInput.type = document.getElementById('showPassword').checked ? 'text' : 'password';
+	        }
+
+	        function submitPassword() {
+	            let password = document.getElementById('passwordInput').value;
+	            if(password === correctPassword) {
+	                window.open(currentUrl, "_blank");
+	            } else {
+	                alert("Неверный пароль! Доступ запрещён.");
+	            }
+	            closeModal();
+	        }
+
+	        function cancelPassword() {
+	            closeModal();
+	        }
+
+	        function closeModal() {
+	            passwordModal.style.display = 'none';
+	            overlay.style.display = 'none';
+	            document.getElementById('passwordInput').value = '';
+	            document.getElementById('showPassword').checked = false;
+	            togglePassword();
+	        }
+   // Проверка статуса входа и перенаправление, если не авторизован
+      if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = "index.html";
+      }
+    /*******************/
+    /* Переключатель темы */
+    /*******************/
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+    });
+    
+    /*******************/
+    /* Навигация секций */
+    /*******************/
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+    const sectionTitle = document.getElementById('sectionTitle');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        const target = link.getAttribute('data-section');
+        sections.forEach(section => {
+          section.classList.remove('active');
+          if (section.id === target) {
+            section.classList.add('active');
+            sectionTitle.textContent = link.textContent.trim();
+            // Если выбраны настройки, выводим минимальный промпт, если чат пустой
+            if(target === "settings" && document.getElementById('chatContainer').childElementCount === 0){
+              appendMessage('ai', minimalPrompt);
+            }
+          }
+        });
+      });
+    });
+    
+    /*******************/
+    /* Секция: Сотрудники */
+    /*******************/
+    const employeesData = [
+      { id: 1, fullName: 'Канат Дарибекович', position: 'Директор', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 2, fullName: 'Канат Имангалиулы', position: 'Главный эксперт', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 3, fullName: 'Жадыра', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 3, fullName: 'Жадыра', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 4, fullName: 'Салтанат Нурбековна', position: 'РОП', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 5, fullName: 'Диана', position: 'SMM', department: 'Филиал', mobile: '+ 7 777 777 77 77' },
+      { id: 6, fullName: 'Ильяр Даниярович', position: 'Тех. отдел', department: 'Филиал', mobile: '+ 7 777 777 77 77' }
+    ];
+    const employeesTableBody = document.querySelector('#employeesTable tbody');
+    function renderEmployees(filter = '') {
+      employeesTableBody.innerHTML = '';
+      const filtered = employeesData.filter(emp =>
+        emp.fullName.toLowerCase().includes(filter.toLowerCase()) ||
+        emp.position.toLowerCase().includes(filter.toLowerCase()) ||
+        emp.department.toLowerCase().includes(filter.toLowerCase()) ||
+        emp.mobile.includes(filter)
+      );
+      filtered.forEach(emp => {
+        employeesTableBody.innerHTML += `
+          <tr>
+            <td>${emp.fullName}</td>
+            <td>${emp.position}</td>
+            <td>${emp.department}</td>
+            <td>${emp.mobile}</td>
+          </tr>
+        `;
+      });
+    }
+    renderEmployees();
+    document.getElementById('employeeSearch').addEventListener('input', (e) => {
+      renderEmployees(e.target.value);
+    });
+    
+    /*******************/
+    /* Секция: Файлы (Файловый менеджер) */
+    /*******************/
+    let filesData = [
+      { id: 1, name: 'Чек лист.pdf', url: 'chek.pdf' },
+      { id: 2, name: 'AMOcrm Обучение.docx', url: 'AmoCRM.docx' },
+      { id: 3, name: 'Путь клиента.xls', url: 'Путь Клиента.xls' },
+		{ id: 4, name: 'Новые ставки.pdf', url: 'новые ставки.pdf' }
+    ];
+    const FAVORITES_KEY = 'favoriteFiles';
+    function getFavoriteFiles() {
+      const favs = localStorage.getItem(FAVORITES_KEY);
+      return favs ? JSON.parse(favs) : [];
+    }
+    function setFavoriteFiles(favs) {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+    }
+    let favoriteFiles = getFavoriteFiles();
+    const filesList = document.getElementById('filesList');
+    let showFavoritesOnly = false;
+    function renderFiles(filter = '') {
+      filesList.innerHTML = '';
+      let filteredFiles = filesData.filter(file =>
+        file.name.toLowerCase().includes(filter.toLowerCase())
+      );
+      if (showFavoritesOnly) {
+        filteredFiles = filteredFiles.filter(file => favoriteFiles.includes(file.id));
+      }
+      filteredFiles.forEach(file => {
+        const isFav = favoriteFiles.includes(file.id);
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('file-item');
+        fileItem.innerHTML = `
+          <span><a href="${file.url}" download>${file.name}</a></span>
+          <button class="favorite-btn ${isFav ? 'active' : ''}" data-id="${file.id}">&#9733;</button>
+        `;
+        filesList.appendChild(fileItem);
+      });
+    }
+    renderFiles();
+    document.getElementById('fileSearch').addEventListener('input', (e) => {
+      renderFiles(e.target.value);
+    });
+    document.getElementById('toggleFavorites').addEventListener('click', () => {
+      showFavoritesOnly = !showFavoritesOnly;
+      document.getElementById('toggleFavorites').textContent = showFavoritesOnly ? 'Показать все файлы' : 'Показать избранное';
+      renderFiles(document.getElementById('fileSearch').value);
+    });
+    filesList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('favorite-btn')) {
+        const fileId = parseInt(e.target.getAttribute('data-id'));
+        if (favoriteFiles.includes(fileId)) {
+          favoriteFiles = favoriteFiles.filter(id => id !== fileId);
+          e.target.classList.remove('active');
+        } else {
+          favoriteFiles.push(fileId);
+          e.target.classList.add('active');
+        }
+        setFavoriteFiles(favoriteFiles);
+        if (showFavoritesOnly) {
+          renderFiles(document.getElementById('fileSearch').value);
+        }
+      }
+    });
+    
+    /*******************/
+    /* Секция: Чат с ИИ (настройки) */
+    /*******************/
+    // Минимальный промпт для ИИ
+    const minimalPrompt = "Хэй, привеееет! Задай мне свой вопрос и я постараюсь ответить тебе ))";
+    
+    // Вставьте сюда ваш API-ключ от OpenAI
+    
+	const part1 = "sk-proj--epHKZsTAVdhTN_Y7VLXfvTGdHIYei";
+	        const part2 = "_C3x9MGy4Yt7nMqsaFKFAex7qVrIzCL9fn09zK5gER9";
+	        const part3 = "MT3BlbkFJ3gXzYqMRG5JDSI1SLoHADZVb240NTP3Q";
+	        const part4 = "AwuyW3aaZ2R4Sn5DYp07OwG6aGfuRwml2CthKnH_IA";
+
+	        const API_KEY = part1 + part2 + part3 + part4;
+	
+    // Функция для добавления сообщений в чат
+    function appendMessage(sender, text) {
+      const chatContainer = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message', sender);
+      messageDiv.textContent = text;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Обработка отправки сообщения
+    document.getElementById('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      // Вывод сообщения пользователя
+      appendMessage('user', message);
+      input.value = '';
+      
+      // Запрос к API OpenAI для получения ответа от GPT-3.5-turbo
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "Ты AI-ассистент Expert Credit. Отвечай креативно и эмоционально, используя современный стиль общения. Максимально 3 предложения. Поддерживай дружеский тон с элементами профессиональной консультации. Используй смайлики под контекст сообщения которое ты отправляешь. Смайлики должны быть в каждом сообщении" },
+              { role: "user", content: message }
+            ]
+          })
+        });
+        const data = await response.json();
+        const aiMessage = data.choices && data.choices[0] && data.choices[0].message
+          ? data.choices[0].message.content.trim()
+          : "Извините, произошла ошибка.";
+        appendMessage('ai', aiMessage);
+      } catch (error) {
+        console.error("Ошибка обращения к API:", error);
+        appendMessage('ai', "Произошла ошибка при обращении к API.");
+      }
+    });
+    
+    // Если сразу открыты настройки, выводим минимальный промпт
+    window.addEventListener('load', () => {
+      const settingsSection = document.getElementById('settings');
+      if (settingsSection.classList.contains('active') && document.getElementById('chatContainer').childElementCount === 0) {
+        appendMessage('ai', minimalPrompt);
+      }
+    });
+  </script>
+</body>
+</html>
