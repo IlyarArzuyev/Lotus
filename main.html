@@ -372,7 +372,76 @@
 	.note-card .note-actions button:hover {
 	  color: #000;
 	}
-	
+	/* Общий стиль */
+	        
+	      
+	        @keyframes gradientAnimation {
+	            0% { background: linear-gradient(135deg, #1e3c72, #2a5298); }
+	            100% { background: linear-gradient(135deg, #2a5298, #1e3c72); }
+	        }
+
+	        /* Контейнер поиска с эффектом стекла */
+	        .search-container {
+	            background: rgba(255, 255, 255, 0.1);
+	            backdrop-filter: blur(15px);
+	            padding: 30px;
+	            border-radius: 20px;
+	            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+	            text-align: center;
+	            transition: transform 0.3s ease, background 0.3s ease;
+	        }
+
+	        .search-container:hover {
+	            transform: translateY(-5px);
+	            background: rgba(255, 255, 255, 0.2);
+	        }
+
+	        /* Логотип */
+	        .logo {
+	            width: 120px;
+	            height: auto;
+	            margin-bottom: 15px;
+	        }
+
+	        h2 {
+	            margin-bottom: 15px;
+	            font-size: 26px;
+	            color: white;
+	            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	        }
+
+	        /* Поле ввода */
+	        input {
+	            width: 320px;
+	            padding: 14px;
+	            font-size: 18px;
+	            border: none;
+	            border-radius: 10px;
+	            outline: none;
+	            transition: all 0.3s ease;
+	            background: rgba(255, 255, 255, 0.3);
+	            box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.2);
+	            color: black;
+	            text-align: left;
+	        }
+
+	        input::placeholder {
+	            color: rgba(255, 255, 255, 0.7);
+	        }
+
+	        input:focus {
+	            box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.3);
+	            background: rgba(255, 255, 255, 0.5);
+	        }
+
+	       
+			#goog {
+			        background: linear-gradient(135deg, #6a11cb, #2575fc); /* Градиентный фон */
+			        padding: 50px 0;
+			        text-align: center;
+			        border-radius: 15px;
+			        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			    }
   </style>
   <script>
     // Функция для открытия ссылки с запросом пароля
@@ -396,6 +465,7 @@
     <hr>
     <ul>
       <li><a href="#" class="nav-link active" data-section="dashboard">🏠 &nbsp;&nbsp;&nbsp;&nbsp;Главная</a></li>
+	   <li><a href="#" class="nav-link" data-section="goog">🌐 &nbsp;&nbsp;&nbsp;&nbsp;Google</a></li>
       <li><a href="#" class="nav-link" data-section="files">📁 &nbsp;&nbsp;&nbsp;&nbsp;Файлы</a></li>
       <li><a href="#" class="nav-link" data-section="employees">👥 &nbsp;&nbsp;&nbsp;&nbsp;Сотрудники</a></li>
       <li><a href="#" class="nav-link" data-section="reports">📊 &nbsp;&nbsp;&nbsp;&nbsp;График</a></li>
@@ -511,6 +581,21 @@
       </form>
     </section>
     
+	
+       <!-- Секция: Поисковик -->
+       <section id="goog" class="section">
+    <div class="search-container">
+           <!-- Логотип компании (замени "logo.png" на свой логотип) -->
+           <img src="logo-default-480x80.png" alt="Логотип компании" class="logo">
+        
+           <h2></h2>
+           <input type="text" id="searchQuery" placeholder="Введите запрос">
+           <br>
+       </div>
+       </section>
+	
+	
+	
     <!-- Секция: Календарь -->
     <section id="calendar" class="section">
       <div class="calendar-buttons">
@@ -905,6 +990,21 @@
 
 	// При загрузке страницы отрисовываем заметки
 	window.addEventListener('load', renderNotes);
+	
+    function search() {
+        let query = document.getElementById("searchQuery").value;
+        if (query.trim() !== "") {
+            let searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(query);
+            window.open(searchUrl, "_blank");
+        }
+    }
+
+    // Добавляем обработчик события для нажатия клавиши Enter
+    document.getElementById("searchQuery").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            search();
+        }
+    });
 	
   </script>
 </body>
