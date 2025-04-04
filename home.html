@@ -412,8 +412,20 @@
       <div id="calendarFrameContainer">
         <!-- Здесь будут отображаться iframe(-ы) в зависимости от выбранной кнопки -->
       </div>
+	  
+	  <div id="notesSection">
+	          <h3>Заметки</h3>
+	          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+	            <input type="text" id="noteInput" placeholder="Введите заметку..." style="flex: 2;">
+	            <input type="datetime-local" id="reminderInput" style="flex: 1;">
+	            <button id="addNoteBtn">Добавить</button>
+	          </div>
+	          <ul id="notesList"></ul>
+	        </div>
     </section>
   </div>
+  
+  	<audio id="notificationSound" src="data:audio/mpeg;base64,//uQBAAAAWMSLwUIYAAsY0XgoQwAEaYLWf2gAIgAA/7sX7v7b/qw/4AD//v/7//7//v///////yH5BAEAAAEALAAAAAAQABAAAAVVICCOJgCQ2EMQmBZLLgTY7HMe6CAgSxTKlr4C6wIAyvCFRgqgCzYDCwKAbOhpPgOBwHAwFgqBwQEYJhYJhQLgUDQYDAKBQLAoGAwFAgAh+QQBAAABACwAAAAAEAAQAAACU4yPecHtvA5kBYA+MDiOIUFQgBQYwCCJYFnACsRwBQOqQIDWYAQBNA2BYBCCwzA8IBhHZAAwLBqFQeFQGBQMBoHBYDAYDAKBQCAQCAQCgWAwGAQAOw=="></audio>
   
   <script>
     let correctPassword = "1234"; // Ваш пароль
@@ -704,6 +716,237 @@
 	    }
 	  });
 	});
-  </script>
+/*******************/
+    /* Секция: Заметки с редактированием и напоминаниями */
+    /*******************/
+    const NOTES_KEY = 'calendarNotes';
+    
+    function loadNotes() {
+      const savedNotes = localStorage.getItem(NOTES_KEY);
+      let notes = savedNotes ? JSON.parse(savedNotes) : [];
+      const notesList = document.getElementById('notesList');
+      notesList.innerHTML = '';
+    
+      notes.forEach((note, index) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = "10px";
+        li.style.padding = "10px";
+        li.style.backgroundColor = "#f9f9f9";
+        li.style.border = "1px solid #ddd";
+        li.style.borderRadius = "5px";
+        li.style.display = "flex";
+        li.style.flexDirection = "column";
+        li.style.gap = "5px";
+    
+        // Контейнер для текста и напоминания
+        const noteContainer = document.createElement('div');
+        noteContainer.style.display = "flex";
+        noteContainer.style.justifyContent = "space-between";
+        noteContainer.style.alignItems = "center";
+    
+        const noteText = document.createElement('span');
+        noteText.textContent = note.text;
+        noteContainer.appendChild(noteText);
+    
+        const reminderSpan = document.createElement('small');
+        if (note.reminder) {
+          const reminderDate = new Date(note.reminder);
+          reminderSpan.textContent = `Напоминание: ${reminderDate.toLocaleString()}`;
+        } else {
+          reminderSpan.textContent = 'Без напоминания';
+        }
+        noteContainer.appendChild(reminderSpan);
+        li.appendChild(noteContainer);
+    
+        // Контейнер для кнопок редактирования/удаления
+        const btnContainer = document.createElement('div');
+        btnContainer.style.display = "flex";
+        btnContainer.style.gap = "10px";
+    
+        const editButton = document.createElement('button');
+        editButton.textContent = "Редактировать";
+        editButton.style.padding = "5px 10px";
+        editButton.style.backgroundColor = "#3498db";
+        editButton.style.color = "#fff";
+        editButton.style.border = "none";
+        editButton.style.borderRadius = "3px";
+        editButton.style.cursor = "pointer";
+        editButton.addEventListener('click', () => startEditNote(index));
+    
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = "Удалить";
+        deleteButton.style.padding = "5px 10px";
+        deleteButton.style.backgroundColor = "#e74c3c";
+        deleteButton.style.color = "#fff";
+        deleteButton.style.border = "none";
+        deleteButton.style.borderRadius = "3px";
+        deleteButton.style.cursor = "pointer";
+        deleteButton.addEventListener('click', () => {
+          notes.splice(index, 1);
+          localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+          loadNotes();
+        });
+    
+        btnContainer.appendChild(editButton);
+        btnContainer.appendChild(deleteButton);
+        li.appendChild(btnContainer);
+    
+        notesList.appendChild(li);
+      });
+    }
+    
+    function addNote() {
+      const noteInput = document.getElementById('noteInput');
+      const reminderInput = document.getElementById('reminderInput');
+      const text = noteInput.value.trim();
+      const reminder = reminderInput.value;
+      if (text) {
+        let savedNotes = localStorage.getItem(NOTES_KEY);
+        let notes = savedNotes ? JSON.parse(savedNotes) : [];
+        notes.push({ text: text, reminder: reminder || null, notified: false });
+        localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+        noteInput.value = '';
+        reminderInput.value = '';
+        loadNotes();
+      }
+    }
+    
+    document.getElementById('addNoteBtn').addEventListener('click', addNote);
+    document.getElementById('noteInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        addNote();
+      }
+    });
+    
+    function startEditNote(index) {
+      let savedNotes = localStorage.getItem(NOTES_KEY);
+      let notes = savedNotes ? JSON.parse(savedNotes) : [];
+      const note = notes[index];
+      const notesList = document.getElementById('notesList');
+      const li = notesList.children[index];
+      li.innerHTML = "";
+    
+      const editTextInput = document.createElement('input');
+      editTextInput.type = "text";
+      editTextInput.value = note.text;
+      editTextInput.style.flex = "1";
+      editTextInput.style.padding = "8px";
+      editTextInput.style.border = "1px solid #ccc";
+      editTextInput.style.borderRadius = "5px";
+    
+      const editReminderInput = document.createElement('input');
+      editReminderInput.type = "datetime-local";
+      editReminderInput.value = note.reminder || "";
+      editReminderInput.style.flex = "1";
+      editReminderInput.style.padding = "8px";
+      editReminderInput.style.border = "1px solid #ccc";
+      editReminderInput.style.borderRadius = "5px";
+    
+      const editContainer = document.createElement('div');
+      editContainer.style.display = "flex";
+      editContainer.style.gap = "10px";
+      editContainer.appendChild(editTextInput);
+      editContainer.appendChild(editReminderInput);
+      li.appendChild(editContainer);
+    
+      const btnContainer = document.createElement('div');
+      btnContainer.style.display = "flex";
+      btnContainer.style.gap = "10px";
+      btnContainer.style.marginTop = "10px";
+    
+      const saveButton = document.createElement('button');
+      saveButton.textContent = "Сохранить";
+      saveButton.style.padding = "5px 10px";
+      saveButton.style.backgroundColor = "#2ecc71";
+      saveButton.style.color = "#fff";
+      saveButton.style.border = "none";
+      saveButton.style.borderRadius = "3px";
+      saveButton.style.cursor = "pointer";
+      saveButton.addEventListener('click', () => {
+        note.text = editTextInput.value.trim();
+        note.reminder = editReminderInput.value || null;
+        note.notified = false;
+        notes[index] = note;
+        localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+        loadNotes();
+      });
+    
+      const cancelButton = document.createElement('button');
+      cancelButton.textContent = "Отменить";
+      cancelButton.style.padding = "5px 10px";
+      cancelButton.style.backgroundColor = "#95a5a6";
+      cancelButton.style.color = "#fff";
+      cancelButton.style.border = "none";
+      cancelButton.style.borderRadius = "3px";
+      cancelButton.style.cursor = "pointer";
+      cancelButton.addEventListener('click', loadNotes);
+    
+      btnContainer.appendChild(saveButton);
+      btnContainer.appendChild(cancelButton);
+      li.appendChild(btnContainer);
+    }
+    
+    loadNotes();
+    
+    /*******************/
+    /* Push-уведомления через Web Notification API */
+    function notify(noteText) {
+         const playNotificationSound = () => {
+           const sound = document.getElementById('notificationSound');
+           try {
+             sound.currentTime = 0;
+             sound.play().catch(error => {
+               console.log('Автовоспроизведение звука заблокировано:', error);
+             });
+           } catch (e) {
+             console.log('Ошибка воспроизведения звука:', e);
+           }
+         };
+
+         if (Notification.permission === "granted") {
+           new Notification("Напоминание", { body: noteText });
+           playNotificationSound();
+         } else if (Notification.permission !== "denied") {
+           Notification.requestPermission().then(permission => {
+             if (permission === "granted") {
+               new Notification("Напоминание", { body: noteText });
+               playNotificationSound();
+             } else {
+               alert(`Напоминание: ${noteText}`);
+               playNotificationSound();
+             }
+           });
+         } else {
+           alert(`Напоминание: ${noteText}`);
+           playNotificationSound();
+         }
+       }
+    
+    function checkReminders() {
+      let savedNotes = localStorage.getItem(NOTES_KEY);
+      let notes = savedNotes ? JSON.parse(savedNotes) : [];
+      const now = new Date();
+      let updated = false;
+    
+      notes.forEach((note, index) => {
+        if (note.reminder && !note.notified) {
+          const reminderTime = new Date(note.reminder);
+          if (now >= reminderTime) {
+            notify(note.text);
+            note.notified = true;
+            updated = true;
+          }
+        }
+      });
+    
+      if (updated) {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+        loadNotes();
+      }
+    }
+    
+    // Проверка напоминаний каждые 10 секунд
+    setInterval(checkReminders, 10000);
+</script>
 </body>
 </html>
