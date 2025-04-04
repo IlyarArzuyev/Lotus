@@ -281,6 +281,98 @@
       margin-top: 5px;
       font-weight: bold;
     }
+	/* Стили для раздела заметок */
+	#notesSection {
+	  margin: 20px 0;
+	  padding: 15px;
+	  background-color: #fdfd96;
+	  border: 2px dashed #f4a261;
+	  border-radius: 10px;
+	}
+
+	#notesSection h3 {
+	  margin-bottom: 10px;
+	  font-size: 24px;
+	  color: #333;
+	}
+
+	/* Форма для добавления заметок */
+	#noteForm {
+	  display: flex;
+	  gap: 10px;
+	  margin-bottom: 20px;
+	}
+
+	#noteForm input {
+	  flex: 1;
+	  padding: 10px;
+	  font-size: 16px;
+	  border: 1px solid #ccc;
+	  border-radius: 5px;
+	}
+
+	#noteForm button {
+	  padding: 10px 20px;
+	  font-size: 16px;
+	  background-color: #f4a261;
+	  color: #fff;
+	  border: none;
+	  border-radius: 5px;
+	  cursor: pointer;
+	  transition: background-color 0.3s;
+	}
+
+	#noteForm button:hover {
+	  background-color: #e76f51;
+	}
+
+	/* Контейнер для заметок */
+	#notesContainer {
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 15px;
+	}
+
+	/* Карточка заметки */
+	.note-card {
+	  background-color: #fffd82;
+	  width: 100%;
+	  min-height: 70px;
+	  padding: 15px;
+	  border: 1px solid #f4a261;
+	  border-radius: 10px;
+	  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+	  position: relative;
+	  word-wrap: break-word;
+	}
+
+	/* Текст заметки */
+	.note-card .note-text {
+	  font-size: 16px;
+	  margin-bottom: 10px;
+	}
+
+	/* Кнопки действий для заметки */
+	.note-card .note-actions {
+	  position: absolute;
+	  top: 5px;
+	  right: 5px;
+	}
+
+	.note-card .note-actions button {
+	  background: none;
+	  border: none;
+	  cursor: pointer;
+	  margin-left: 5px;
+	  font-size: 16px;
+	  color: #555;
+	  transition: color 0.3s;
+	}
+
+	.note-card .note-actions button:hover {
+	  color: #000;
+	}
+	
   </style>
   <script>
     // Функция для открытия ссылки с запросом пароля
@@ -330,8 +422,8 @@
         <a class="card" href="specialist.html">
           👩🏻‍💼👨🏻‍💼 <br><br><strong>Экспертам</strong><br>Информация
         </a>
-       
         
+       
         <br> 
       </div>
 
@@ -339,13 +431,16 @@
           <a class="card" href="pdf.html">
             📱➕➖ <br><br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
           </a>
-        <a class="card" href="https://expertcredit.amocrm.ru/todo/line/" target="_blank">
-          💻 <br><br><strong>AMOcrm</strong><br>Открыть
-        </a>
-        <a class="card" href="otbasy.html">
-          🏠➕➖ <br><br><strong>Калькулятор</strong><br>Отбасы
-        </a>
        
+       <a class="card" href="otbasy.html">
+         🏠➕➖ <br><br><strong>Калькулятор</strong><br>Отбасы
+       </a>
+       </div>
+	   
+	   <div class="stats">
+           <a class="card" href="https://expertcredit.amocrm.ru/todo/line/" target="_blank">
+             💻 <br><br><strong>AMOcrm</strong><br>Открыть
+           </a>
       </div>
       <br><br>
     </section>
@@ -409,10 +504,21 @@
       <div class="calendar-buttons">
         <button class="calendar-button" data-type="kanat">Канат Б</button>
         <button class="calendar-button" data-type="experts">Эксперты</button>
-      </div>
+      </div> 
+	  
       <div id="calendarFrameContainer">
         <!-- Здесь будут отображаться iframe(-ы) в зависимости от выбранной кнопки -->
       </div>
+	  
+ <!-- Раздел для заметок -->
+  <div id="notesSection">
+    <h3>Мои заметки</h3>
+    <form id="noteForm">
+      <input type="text" id="noteInput" placeholder="Новая заметка" required>
+      <button type="submit">Добавить</button>
+    </form>
+    <div id="notesContainer"></div>
+  </div>
     </section>
   </div>
   
@@ -705,6 +811,89 @@
 	    }
 	  });
 	});
+	// Ключ для хранения заметок в localStorage
+	const NOTES_KEY = 'calendarNotes';
+
+	// Функция для загрузки заметок из localStorage
+	function loadNotes() {
+	  const notes = localStorage.getItem(NOTES_KEY);
+	  return notes ? JSON.parse(notes) : [];
+	}
+
+	// Функция для сохранения заметок в localStorage
+	function saveNotes(notes) {
+	  localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+	}
+
+	// Функция для отрисовки заметок с улучшенным визуалом
+	function renderNotes() {
+	  const notesContainer = document.getElementById('notesContainer');
+	  const notes = loadNotes();
+	  notesContainer.innerHTML = '';
+  
+	  notes.forEach(note => {
+	    const card = document.createElement('div');
+	    card.classList.add('note-card');
+	    card.dataset.id = note.id;
+    
+	    card.innerHTML = `
+	      <div class="note-actions">
+	        <button class="edit-note" title="Редактировать">✏️</button>
+	        <button class="delete-note" title="Удалить">❌</button>
+	      </div>
+	      <div class="note-text">${note.text}</div>
+	    `;
+	    notesContainer.appendChild(card);
+	  });
+	}
+
+	// Обработчик добавления заметки
+	document.getElementById('noteForm').addEventListener('submit', function(e) {
+	  e.preventDefault();
+	  const input = document.getElementById('noteInput');
+	  const text = input.value.trim();
+	  if (!text) return;
+  
+	  const notes = loadNotes();
+	  const newNote = {
+	    id: Date.now(), // уникальный идентификатор
+	    text: text
+	  };
+	  notes.push(newNote);
+	  saveNotes(notes);
+	  renderNotes();
+	  input.value = '';
+	});
+
+	// Делегирование событий для редактирования и удаления заметок
+	document.getElementById('notesContainer').addEventListener('click', function(e) {
+	  const card = e.target.closest('.note-card');
+	  if (!card) return;
+	  const noteId = parseInt(card.dataset.id);
+	  let notes = loadNotes();
+  
+	  // Удаление заметки
+	  if (e.target.classList.contains('delete-note')) {
+	    notes = notes.filter(note => note.id !== noteId);
+	    saveNotes(notes);
+	    renderNotes();
+	  }
+  
+	  // Редактирование заметки
+	  if (e.target.classList.contains('edit-note')) {
+	    const currentText = card.querySelector('.note-text').textContent;
+	    const newText = prompt("Редактировать заметку:", currentText);
+	    if (newText !== null && newText.trim() !== '') {
+	      notes = notes.map(note => note.id === noteId ? { ...note, text: newText.trim() } : note);
+	      saveNotes(notes);
+	      renderNotes();
+	    }
+	  }
+	});
+
+	// При загрузке страницы отрисовываем заметки
+	window.addEventListener('load', renderNotes);
+	
   </script>
 </body>
 </html>
