@@ -35,7 +35,6 @@
 <h2></h2>
 <table id="sheetTable"></table>
 
-
 <script>
   // Замените на свои параметры:
   const sheetId = "1phiarzwfQ3IVOfo43N3nhTt0iDL6dWHCkghmOvIuAWs";
@@ -122,6 +121,12 @@
         return null;
       }
 
+      // Функция для форматирования текста с переносами
+      function formatTextWithLineBreaks(text) {
+        if (!text) return "";
+        return text.replace(/\n/g, "<br>");
+      }
+
       // Перебираем видимые строки
       visibleRows.forEach((origRow, rowIndex) => {
         const row = rowData[origRow] || {};
@@ -145,8 +150,8 @@
             if (mergeInfo.colspan > 1) cellElement.colSpan = mergeInfo.colspan;
           }
 
-          // Записываем отформатированное значение (если оно есть)
-          cellElement.textContent = cell.formattedValue || "";
+          // Записываем отформатированное значение (с учетом переносов)
+          cellElement.innerHTML = formatTextWithLineBreaks(cell.formattedValue || "");
 
           // Применяем форматирование (например, цвет фона)
           const bgColor = getColor(cell.effectiveFormat);
