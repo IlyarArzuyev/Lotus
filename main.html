@@ -526,7 +526,19 @@
 				    text-align: center;
 					
 				}
-				
+				.call-btn {
+				  background: #4CAF50;
+				  color: white;
+				  border: none;
+				  padding: 8px 15px;
+				  border-radius: 5px;
+				  cursor: pointer;
+				  transition: background 0.3s;
+				}
+
+				.call-btn:hover {
+				  background: #45a049;
+				}
   </style>
   <script>
     // Функция для открытия ссылки с запросом пароля
@@ -633,12 +645,21 @@
             <th>Должность</th>
             <th>Отдел</th>
             <th>Сотовый номер</th>
+		    <th>Действия</th> <!-- Новая колонка -->
           </tr>
         </thead>
         <tbody>
           <!-- Данные заполняются JS -->
         </tbody>
       </table>
+	  <!-- Модальное окно для QR-кода -->
+	  <div class="modal-overlay" id="qrModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+	    <div class="qr-modal" style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+	      <h3>Отсканируйте для звонка</h3>
+	      <canvas id="phoneQR"></canvas>
+	      <button onclick="closeQRModal()" style="margin-top: 15px; padding: 8px 20px;">Закрыть</button>
+	    </div>
+	  </div>
     </section>
     
     <!-- Секция: Отчёты -->
@@ -822,33 +843,65 @@
       { id: 3, fullName: 'Жадыра Б', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 982 82 89' },
       { id: 4, fullName: 'Салтанат Нурбековна', position: 'РОП', department: 'Филиал', mobile: '+ 7 707 558 87 97' },
       { id: 5, fullName: 'Диана', position: 'SMM', department: 'Филиал', mobile: '+ 7 708 164 15 98' },
-      { id: 6, fullName: 'Ильяр Даниярович', position: 'Тех. отдел', department: 'Филиал', mobile: '+ 7 708 217 13 13' }
+      { id: 6, fullName: 'Бауыржан К.', position: 'МОП', department: 'Филиал', mobile: '+ 7 705 799 98 53' },
+      { id: 7, fullName: 'Тимур А.', position: 'МОП', department: 'Филиал', mobile: '+ 7 700 258 29 32' },
+      { id: 8, fullName: 'Катерина.', position: 'SMM', department: 'Филиал', mobile: '+ 7 707 321 86 70' },
+      { id: 9, fullName: 'Евгений Шот.', position: '-', department: 'Филиал', mobile: '+ 7 707 133 99 06' },
+      { id: 10, fullName: 'Ильяр Даниярович', position: 'Тех. отдел', department: 'Филиал', mobile: '+ 7 708 217 13 13' }
     ];
     const employeesTableBody = document.querySelector('#employeesTable tbody');
-    function renderEmployees(filter = '') {
-      employeesTableBody.innerHTML = '';
-      const filtered = employeesData.filter(emp =>
-        emp.fullName.toLowerCase().includes(filter.toLowerCase()) ||
-        emp.position.toLowerCase().includes(filter.toLowerCase()) ||
-        emp.department.toLowerCase().includes(filter.toLowerCase()) ||
-        emp.mobile.includes(filter)
-      );
-      filtered.forEach(emp => {
-        employeesTableBody.innerHTML += `
-          <tr>
-            <td>${emp.fullName}</td>
-            <td>${emp.position}</td>
-            <td>${emp.department}</td>
-            <td>${emp.mobile}</td>
-          </tr>
-        `;
-      });
-    }
+	function renderEmployees(filter = '') {
+	  employeesTableBody.innerHTML = '';
+	  const filtered = employeesData.filter(emp =>
+	    emp.fullName.toLowerCase().includes(filter.toLowerCase()) ||
+	    emp.position.toLowerCase().includes(filter.toLowerCase()) ||
+	    emp.department.toLowerCase().includes(filter.toLowerCase()) ||
+	    emp.mobile.includes(filter)
+	  );
+  
+	  filtered.forEach(emp => {
+	    const cleanPhone = emp.mobile.replace(/[+\s]/g, ''); // Очищаем номер для tel:
+	    employeesTableBody.innerHTML += `
+	      <tr>
+	        <td>${emp.fullName}</td>
+	        <td>${emp.position}</td>
+	        <td>${emp.department}</td>
+	        <td>${emp.mobile}</td>
+	        <td>
+	          <button class="call-btn" onclick="generatePhoneQR('${cleanPhone}')">
+	            📞 Позвонить
+	          </button>
+	        </td>
+	      </tr>
+	    `;
+	  });
+	}
     renderEmployees();
     document.getElementById('employeeSearch').addEventListener('input', (e) => {
       renderEmployees(e.target.value);
     });
-    
+	function generatePhoneQR(phoneNumber) {
+	  const qrModal = document.getElementById('qrModalOverlay');
+	  const qrCanvas = document.getElementById('phoneQR');
+  
+	  // Очищаем предыдущий QR-код
+	  qrCanvas.width = 200;
+	  qrCanvas.height = 200;
+  
+	  new QRious({
+	    element: qrCanvas,
+	    value: `tel:${phoneNumber}`,
+	    size: 200,
+	    background: 'white',
+	    foreground: 'black'
+	  });
+  
+	  qrModal.style.display = 'flex';
+	}
+
+	function closeQRModal() {
+	  document.getElementById('qrModalOverlay').style.display = 'none';
+	}
     /*******************/
     /* Секция: Файлы (Файловый менеджер) */
     /*******************/
