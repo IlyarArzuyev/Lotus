@@ -442,6 +442,91 @@
 			        border-radius: 15px;
 			        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 			    }
+				.simple-buttons {
+				    margin-top: 30px;
+				    display: flex;
+				    gap: 15px;
+				    flex-wrap: wrap;
+				    justify-content: center;
+				    user-select: none; /* запрет выделения текста */
+				}
+
+				.simple-buttons button {
+				    background: transparent;
+				    border: 2px solid white;
+				    padding: 10px 20px;
+				    border-radius: 12px;
+				    font-size: 16px;
+				    font-weight: 500;
+				    color: white;
+				    cursor: pointer;
+				    transition: all 0.3s ease;
+				    user-select: none;
+				}
+
+				.simple-buttons button:hover {
+				    background-color: rgba(255, 255, 255, 0.15);
+				    transform: translateY(-2px);
+				}
+
+				.simple-buttons button:active {
+				    transform: scale(0.96);
+				}
+				.clock {
+				    margin-top: 20px;
+				    font-size: 18px;
+				    color: white;
+				    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+				}
+				
+				.qr-section {
+				    text-align: center;
+				    background: rgba(255, 255, 255, 0.1); /* Легкий фон */
+				    padding: 20px;
+				    border-radius: 10px;
+				    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+					
+				}
+				.qr-container {
+				    display: flex;
+				    justify-content: center;
+				    align-items: center;
+				    height: 100vh; /* Занимает всю высоту экрана */
+					width: 700px;
+				}
+
+				.qr-section input {
+				    padding: 10px;
+				    width: 80%;
+				    margin: 10px 0;
+				    border-radius: 8px;
+				    border: none;
+				    outline: none;
+				    background: rgba(255,255,255,0.3);
+				    color: white;
+				    text-align: center;
+				}
+
+				.qr-section button {
+				    padding: 10px 20px;
+				    border: none;
+				    background-color: #ff7e5f;
+				    color: white;
+				    border-radius: 8px;
+				    cursor: pointer;
+				}
+
+				.qr-section button:hover {
+				    background-color: #feb47b;
+				}
+
+				.calendar-section div {
+				    color: white;
+				    font-size: 14px;
+				    text-align: center;
+					
+				}
+				
   </style>
   <script>
     // Функция для открытия ссылки с запросом пароля
@@ -589,9 +674,36 @@
            <img src="logo-default-480x80.png" alt="Логотип компании" class="logo">
         
            <h2></h2>
+         
            <input type="text" id="searchQuery" placeholder="Введите запрос">
            <br>
+		   <!-- Кнопки-ссылки в минималистичном стиле -->
+		   <div class="simple-buttons">
+		       <button onclick="openLink('https://enpf-otbasy.kz')">enpf-otbasy</button>
+		       <button onclick="openLink('https://egov.kz/cms/ru')">egov.kz</button>
+		       <button onclick="openLink('https://hcsbk.kz/ru/')">otbasy</button>
+		       <button onclick="openLink('https://www.bcc.kz/kz/')">bcc.kz</button>
+		       <button onclick="openLink('https://altynbank.kz')">altynbank.kz</button>
+		   </div>
+		   <br><br><br><br>
+		   
+		   <div id="clock" class="clock"></div>
+		   
+		   
        </div>
+	   <br><br>
+	   
+	   <!-- QR Генератор -->
+	   <div id="cl" class="clock">
+	       <h3>QR-код (открыть с телефона)</h3>
+	       <input type="text" id="qrInput" placeholder="Введите текст или ссылку">
+		   <br>
+	       <button onclick="generateQR()">Создать QR</button>
+	       <br>
+	       <canvas id="qrCanvas"></canvas>
+	   </div>
+
+	   
        </section>
 	
 	
@@ -619,6 +731,7 @@
     </section>
   </div>
   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <script>
     let correctPassword = "1234"; // Ваш пароль
     let currentUrl = '';
@@ -1005,7 +1118,54 @@
             search();
         }
     });
+
+    function openLink(url) {
+        window.open(url, '_blank');
+    }
 	
+	setInterval(() => {
+	    const now = new Date();
+	    document.getElementById("clock").textContent =
+	        now.toLocaleString("ru-RU", { hour12: false });
+	}, 1000);
+	
+	function generateQR() {
+	        const input = document.getElementById("qrInput").value;
+	        const qr = new QRious({
+	            element: document.getElementById("qrCanvas"),
+	            value: input,
+	            size: 150,
+	        });
+	    }
+
+	    // Мини-календарь
+	    function renderMiniCalendar() {
+	        const container = document.getElementById("miniCalendar");
+	        const now = new Date();
+	        const monthNames = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+	        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+	        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+	        const today = now.getDate();
+
+	        let html = `<strong>${monthNames[now.getMonth()]} ${now.getFullYear()}</strong><br><div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:5px;">`;
+
+	        const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+	        for (let d of days) html += `<div><b>${d}</b></div>`;
+
+	        let pad = firstDay === 0 ? 6 : firstDay - 1;
+	        for (let i = 0; i < pad; i++) html += `<div></div>`;
+
+	        for (let day = 1; day <= daysInMonth; day++) {
+	            let isToday = day === today ? 'style="background:#ff7e5f;color:white;border-radius:50%;"' : "";
+	            html += `<div ${isToday}>${day}</div>`;
+	        }
+
+	        html += `</div>`;
+	        container.innerHTML = html;
+	    }
+
+	    renderMiniCalendar();
   </script>
+	
 </body>
 </html>
