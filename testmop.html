@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Credit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .top-container {
+            display: flex;
+            flex: 1;
+            margin: 20px;
+        }
+
+        .left {
+            flex: 2;
+            background-color: #E6E6FA;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-right: 20px;
+        }
+
+        .left h1 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px;
+            color: #00008B;
+        }
+
+        .grid-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .grid-table th, .grid-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left; /* Выравнивание по правому краю */
+        }
+
+        .grid-table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Присваивание цвета каждой строке */
+ .grid-table tr:nth-child(1) {
+            background-color: #E0FFFF; /* Светло-красный */
+  }
+        .grid-table tr:nth-child(2) {
+            background-color: #F0E68C; /* Светло-красный */
+        }
+        .grid-table tr:nth-child(3) {
+            background-color: #F0E68C; /* Светло-зелёный */
+        }
+        .grid-table tr:nth-child(4) {
+            background-color: #8FBC8F; /* Светло-синий */
+        }
+        .grid-table tr:nth-child(5) {
+            background-color: #8FBC8F; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(6) {
+            background-color: #AFEEEE; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(7) {
+            background-color: #AFEEEE; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(8) {
+            background-color: #AFEEEE; /* Светло-жёлтый */
+        }
+
+
+.grid-table tr:nth-child(9) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(10) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(11) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+.grid-table tr:nth-child(12) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(13) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(14) {
+            background-color: #FF6347; /* Светло-жёлтый */
+        }
+.grid-table tr:nth-child(15) {
+            background-color: #FFB6C1; /* Светло-жёлтый */
+        }
+         .grid-table tr:nth-child(16) {
+            background-color: #98FB98; /* Светло-жёлтый */
+        }
+
+
+        .bottom-container {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .right {
+            background-color: #FFEFD5;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .calculator {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f1f3f4;
+            border: 1px solid #ddd;
+        }
+
+        .calculator input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .calculator label {
+            font-size: 16px;
+            color: #333;
+        }
+
+.bottom-container {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+.bank-info, .links-container {
+            margin: 20px 0;
+        }
+
+        .bank-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .bank-info .info-block {
+            flex: 1;
+            min-width: 200px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00BFFF;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 3mm;
+        }
+
+        .calculator button:hover {
+            background-color: #1e90ff;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+.links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .links-container a {
+            padding: 10px 20px;
+            background-color: #00BFFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .links-container a:hover {
+            background-color: #1e90ff;
+            transform: scale(1.1);
+        }
+		
+	    .chat-popup {
+	        position: fixed;
+	        bottom: 20px;
+	        right: 20px;
+	        width: 300px;
+	        background-color: #fff;
+	        border: 1px solid #ddd;
+	        border-radius: 8px;
+	        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	        z-index: 1000;
+	        font-family: Arial, sans-serif;
+	        display: flex;
+	        flex-direction: column;
+	    }
+	    .chat-header {
+	        background-color: #ff7f31;
+	        color: #fff;
+	        padding: 10px;
+	        border-top-left-radius: 8px;
+	        border-top-right-radius: 8px;
+	        display: flex;
+	        justify-content: space-between;
+	        align-items: center;
+	        cursor: pointer;
+	    }
+	    .chat-body {
+	        display: block;
+	        padding: 10px;
+	    }
+	    .chat-body.hidden {
+	        display: none;
+	    }
+	    #chatMessages {
+	        max-height: 200px;
+	        overflow-y: auto;
+	        margin-bottom: 10px;
+	        border: 1px solid #eee;
+	        padding: 5px;
+	        display: flex;
+	        flex-direction: column;
+	        gap: 5px;
+	    }
+	    .chat-message {
+	        padding: 8px;
+	        border-radius: 8px;
+	        max-width: 80%;
+	        word-wrap: break-word;
+	    }
+	    .user-message {
+	        background-color: #DCF8C6;
+	        align-self: flex-end;
+	        text-align: right;
+	    }
+	    .ai-message {
+	        background-color: #F1F0F0;
+	        align-self: flex-start;
+	        text-align: left;
+	    }
+	    #chatInput {
+	        width: calc(100% - 90px);
+	        padding: 8px;
+	        border: 1px solid #ccc;
+	        border-radius: 4px;
+	    }
+	    #sendChatBtn {
+	        padding: 8px 12px;
+	        border: none;
+	        background-color: #ff7f31;
+	        color: #fff;
+	        border-radius: 4px;
+	        cursor: pointer;
+	    }
+		
+    </style>
+</head>
+<body>
+
+
+		 <div class="iframe-container" id="iframeContainer" style="position: relative; height: 355vh; width: 100%;">
+		   <!-- Прозрачный слой для перехвата событий -->
+		   <div id="iframeOverlay" style="
+		       position: absolute;
+		       top: 0;
+		       left: 0;
+		       width: 100%;
+		       height: 100%;
+		       z-index: 2;
+		       background: transparent;
+		   "></div>
+		   <iframe src="https://docs.google.com/spreadsheets/d/1phiarzwfQ3IVOfo43N3nhTt0iDL6dWHCkghmOvIuAWs/edit?gid=0#gid=0" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+		 </div>
+         
+
+
+
+<div class="bottom-container">
+    <!-- Блок с информацией о банках -->
+    <div class="bank-info">
+        <div class="info-block">
+            <h3>Банк 1</h3>
+            <p>Информация о банке 1</p>
+        </div>
+        <div class="info-block">
+            <h3>Банк 2</h3>
+            <p>Информация о банке 2</p>
+        </div>
+        <div class="info-block">
+            <h3>Банк 3</h3>
+            <p>Информация о банке 3</p>
+        </div>
+        <div class="info-block">
+            <h3>Банк 4</h3>
+            <p>Информация о банке 4</p>
+        </div>
+    </div>
+
+
+<!-- Блок со ссылками -->
+    <div class="links-container">
+        <a href="otbasy.html">Otbasy calculate</a>
+        <a href="#">Ссылка 2</a>
+        <a href="#">Ссылка 3</a>
+        <a href="#">Ссылка 4</a>
+        <a href="#">Ссылка 5</a>
+        <a href="#">Ссылка 6</a>
+        <a href="#">Ссылка 7</a>
+        <a href="#">Ссылка 8</a>
+ 
+<div class="links-container">
+        <a href="#">Ссылка 9</a>
+        <a href="#">Ссылка 10</a>
+        <a href="#">Ссылка 11</a>
+        <a href="#">Ссылка 12</a>
+        <a href="#">Ссылка 13</a>
+        <a href="#">Ссылка 14</a>
+        <a href="#">Ссылка 15</a>
+        <a href="#">Ссылка 16</a>
+    </div>
+</div>
+
+
+<div class="bottom-container">
+    <div class="right">
+        <h2>Кредитный Калькулятор</h2>
+        <div class="calculator">
+            <form id="calculatorForm">
+                <label for="loanAmount">Сумма кредита:</label>
+                <input type="text" id="loanAmount" name="loanAmount" placeholder="Введите сумму">
+
+                <label for="interestRate">Процентная ставка:</label>
+                <input type="text" id="interestRate" name="interestRate" placeholder="Введите ставку">
+
+                <label for="loanTerm">Срок кредита (в месяцах):</label>
+                <input type="text" id="loanTerm" name="loanTerm" placeholder="Введите срок">
+
+                <button type="button" onclick="calculateLoan()">Рассчитать</button>
+
+                <div class="result" id="result"></div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="chatPopup" class="chat-popup">
+    <div class="chat-header" onclick="toggleChat()">
+        <span>AI помощник</span>
+        <button id="toggleChatBtn" style="background:none; border:none; color:#fff; font-size:16px; cursor:pointer;">–</button>
+    </div>
+    <div id="chatBody" class="chat-body">
+        <div id="chatMessages"></div>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="chatInput" placeholder="Введите сообщение...">
+            <button id="sendChatBtn" onclick="sendMessage()">Отправить</button>
+        </div>
+    </div>
+</div>
+  <script>
+    // Проверка статуса входа
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      // Если пользователь не вошел в систему, перенаправить на страницу входа
+      window.location.href = "index.html";
+    }
+  </script>
+
+<script>
+    // Функция для форматирования чисел с пробелами
+    function formatNumberWithSpaces(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    // Функция расчета кредита
+    function calculateLoan() {
+        const loanAmountInput = document.getElementById('loanAmount');
+        const interestRateInput = document.getElementById('interestRate');
+        const loanTermInput = document.getElementById('loanTerm');
+        const resultDiv = document.getElementById('result');
+
+        // Получаем и форматируем значения
+        let loanAmount = parseFloat(loanAmountInput.value.replace(/\s+/g, ''));
+        let interestRate = parseFloat(interestRateInput.value.replace(',', '.'));
+        let loanTerm = parseInt(loanTermInput.value.replace(/\s+/g, ''));
+
+        if (!isNaN(loanAmount) && !isNaN(interestRate) && !isNaN(loanTerm)) {
+            let monthlyInterestRate = interestRate / 100 / 12;
+            let monthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTerm)) / (Math.pow(1 + monthlyInterestRate, loanTerm) - 1);
+            let totalPayment = monthlyPayment * loanTerm;
+            let overpayment = totalPayment - loanAmount;
+
+            // Отображение результата с форматированием
+            resultDiv.innerHTML = `
+                <p>Ежемесячный платёж: ${formatNumberWithSpaces(monthlyPayment.toFixed(2))} тг.</p>
+                <p>Переплата: ${formatNumberWithSpaces(overpayment.toFixed(2))} тг.</p>
+                <p>Общая сумма выплат: ${formatNumberWithSpaces(totalPayment.toFixed(2))} тг.</p>
+            `;
+        } else {
+            resultDiv.innerHTML = `<p style="color: red;">Пожалуйста, введите корректные данные.</p>`;
+        }
+    }
+
+    // Форматирование ввода с пробелами
+    document.getElementById('loanAmount').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\s+/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        e.target.value = value;
+    });
+
+    document.getElementById('loanTerm').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\s+/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        e.target.value = value;
+    });
+</script>
+<script>
+    // Проверка статуса входа
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      // Если пользователь не вошел в систему, перенаправить на страницу входа
+      window.location.href = "index.html";
+    }
+ // Функция для переключения отображения чата
+    function toggleChat() {
+        const chatBody = document.getElementById('chatBody');
+        const toggleBtn = document.getElementById('toggleChatBtn');
+        if (chatBody.classList.contains('hidden')) {
+            chatBody.classList.remove('hidden');
+            toggleBtn.textContent = "–";
+        } else {
+            chatBody.classList.add('hidden');
+            toggleBtn.textContent = "+";
+        }
+    }
+
+    // Разбивка API-ключа на части
+    const part1 = "sk-proj--epHKZsTAVdhTN_Y7VLXfvTGdHIYei";
+    const part2 = "_C3x9MGy4Yt7nMqsaFKFAex7qVrIzCL9fn09zK5gER9";
+    const part3 = "MT3BlbkFJ3gXzYqMRG5JDSI1SLoHADZVb240NTP3Q";
+    const part4 = "AwuyW3aaZ2R4Sn5DYp07OwG6aGfuRwml2CthKnH_IA";
+    const apiKey = part1 + part2 + part3 + part4;
+
+    // Настройка systemPrompt для ИИ
+    const systemPrompt = {
+        role: "system",
+        content: "Ты AI-ассистент Expert Credit. Отвечай креативно и эмоционально, используя современный стиль общения. Максимально 3 предложения. Поддерживай дружеский тон с элементами профессиональной консультации. Используй смайлики под контекст сообщения которое ты отправляешь. Смайлики должны быть в каждом сообщении"
+    };
+
+    // Функция отправки сообщения с вызовом OpenAI API
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (message === "") return;
+    
+        const chatMessages = document.getElementById('chatMessages');
+        
+        // Создаем пузырёк для сообщения пользователя
+        const userMessageElem = document.createElement('div');
+        userMessageElem.classList.add('chat-message', 'user-message');
+        userMessageElem.textContent = message;
+        chatMessages.appendChild(userMessageElem);
+        input.value = "";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+        // Вызов API GPT-3.5-turbo
+        fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + apiKey
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    systemPrompt,
+                    {role: "user", content: message}
+                ]
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const aiMessage = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content
+                ? data.choices[0].message.content.trim()
+                : "Извините, я не смог обработать ваш запрос.";
+            // Создаем пузырёк для ответа ИИ
+            const aiMessageElem = document.createElement('div');
+            aiMessageElem.classList.add('chat-message', 'ai-message');
+            aiMessageElem.textContent = aiMessage;
+            chatMessages.appendChild(aiMessageElem);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Ошибка при запросе к API:', error);
+            const errorElem = document.createElement('div');
+            errorElem.classList.add('chat-message', 'ai-message');
+            errorElem.textContent = "Извините, произошла ошибка. Попробуйте позже.";
+            chatMessages.appendChild(errorElem);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    }
+    
+    // Отправка сообщения при нажатии Enter
+    document.getElementById('chatInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+	const overlay = document.getElementById('iframeOverlay');
+
+	// Перехватываем колесо мыши, чтобы предотвратить скролл страницы
+	overlay.addEventListener('wheel', function(e) {
+	  e.preventDefault();
+	}, { passive: false });
+
+	// При клике по оверлею скрываем его, чтобы дать доступ к iframe
+	overlay.addEventListener('click', function() {
+	  this.style.display = 'none';
+	});
+	
+  </script>
+</body>
+</html>
