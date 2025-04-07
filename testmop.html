@@ -3,131 +3,380 @@
 <head>
   <meta charset="UTF-8">
   <title>Чат сотрудников</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: sans-serif;
-      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #ece5dd;
+      display: flex;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      height: 100vh;
+      background: #ffffff;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      overflow: hidden;
     }
-    #chat {
+    .header {
+      background: Black;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 500;
+      position: fixed;
+      top: 0;
       width: 100%;
-      max-width: 600px;
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    #auth {
+      padding: 20px;
+      text-align: center;
+      background: #f6f6f6;
+      border-bottom: 1px solid #ddd;
+      margin-top: 60px; /* Отступ под фиксированным заголовком */
+    }
+    #chat-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-top: 60px; /* Отступ под фиксированным заголовком */
+      margin-bottom: 80px; /* Отступ над фиксированным вводом */
+      height: calc(100vh - 140px); /* 60px header + 80px input */
+      overflow: auto;
+    }
+    #chat-container {
+      display: flex;
+      flex: 1;
       overflow-y: auto;
-      height: 400px;
-      margin-bottom: 10px;
+    }
+    .input-section {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #f0f0f0;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+    }
+    /* Остальные стили остаются без изменений */
+    select, input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      background: #075E54;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #064c47;
+    }
+    #chat-box {
+      flex: 4;
+      background: white;
+      padding: 15px;
+      overflow-y: auto;
     }
     .message {
-      margin: 5px 0;
+      max-width: 70%;
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 15px;
+      background: #DCDCDC;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      word-wrap: break-word;
+    }
+    .message.own {
+      margin-left: auto;
+      background: #dcf8c6;
+    }
+    .message strong {
+      color: #075E54;
     }
     .meta {
-      font-size: 12px;
-      color: gray;
+      font-size: 10px;
+      color: #555;
+      margin-top: 5px;
+      text-align: right;
+    }
+    #active-users {
+      flex: 1;
+      background: #f8f9fa;
+      padding: 15px;
+      overflow-y: auto;
+      border-left: 1px solid #ddd;
+      min-width: 200px;
+    }
+    #active-users h3 {
+      margin-top: 0;
+      text-align: center;
+      color: #075E54;
+    }
+    #usersList {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    #usersList li {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+      color: #333;
     }
     #typing {
       font-style: italic;
-      color: green;
+      color: #4caf50;
+      margin: 10px 15px;
+      min-height: 20px;
     }
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      width: 100%;
-      max-width: 600px;
-      box-sizing: border-box;
+    .file-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 18px;
+      color: #075E54;
+    }
+    #sendButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #075E54;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 16px;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      #chat-container {
+        flex-direction: column;
+      }
+      #active-users {
+        border-left: none;
+        border-top: 1px solid #ddd;
+      }
+      #chat-section {
+        margin-bottom: 70px;
+        height: calc(100vh - 130px);
+      }
     }
   </style>
 </head>
 <body>
 
-<h2>Чат сотрудников</h2>
-<input id="username" placeholder="Введите ваше имя" />
-<div id="chat"></div>
-<div id="typing"></div>
-<input id="messageInput" placeholder="Введите сообщение..." />
-<button onclick="sendMessage()">Отправить</button>
+<div class="container">
+  <div class="header">Чат Expert Credit</div>
+  
+  <div id="auth">
+    <label for="userSelect">Выберите ваше имя:</label>
+    <select id="userSelect">
+      <option disabled selected>-- Выберите имя --</option>
+      <option value="Канат Б">Канат Б.</option>
+      <option value="Канат И">Канат И.</option>
+      <option value="Жадыра А">Жадыра А.</option>
+      <option value="Жадыра Б">Жадыра Б.</option>
+      <option value="Салтанат">Салтанат</option>
+    </select>
+    <button onclick="login()">Войти</button>
+  </div>
 
-<!-- Firebase SDK -->
+  <div id="chat-section" style="display:none;">
+    <div id="chat-container">
+      <div id="chat-box"></div>
+      <div id="active-users">
+        <h3>Активные пользователи</h3>
+        <ul id="usersList"></ul>
+      </div>
+    </div>
+    <div id="typing"></div>
+    <div class="input-section">
+      <input id="messageInput" type="text" placeholder="Введите сообщение..." />
+      <input type="file" id="fileInput" style="display:none;" />
+      <label for="fileInput" class="file-label" title="Выбрать файл">
+        <i class="fa fa-paperclip"></i>
+      </label>
+      <button id="sendButton" onclick="sendMessage()" title="Отправить">
+        <i class="fa fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
 
 <script>
-  // ✅ Замените на свой Firebase config:
   const firebaseConfig = {
-    apiKey: "AIzaSyDnEgFL-We7xG7-HYdrdpwrXV7oA-DUBEA",
-    authDomain: "database-214e2.firebaseapp.com",
-    databaseURL: "https://database-214e2-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "database-214e2",
-    storageBucket: "database-214e2.firebasestorage.app",
-    messagingSenderId: "145453239041",
-    appId: "1:145453239041:web:6f78fb7fbac0645b04e900"
+      apiKey: "AIzaSyDnEgFL-We7xG7-HYdrdpwrXV7oA-DUBEA",
+      authDomain: "database-214e2.firebaseapp.com",
+      databaseURL: "https://database-214e2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "database-214e2",
+      storageBucket: "database-214e2.firebasestorage.app",
+      messagingSenderId: "145453239041",
+      appId: "1:145453239041:web:6f78fb7fbac0645b04e900"
   };
+
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+  const storage = firebase.storage();
 
-  const usernameInput = document.getElementById('username');
+  const userSelect = document.getElementById('userSelect');
+  const chatSection = document.getElementById('chat-section');
+  const chatBox = document.getElementById('chat-box');
   const messageInput = document.getElementById('messageInput');
-  const chat = document.getElementById('chat');
+  const fileInput = document.getElementById('fileInput');
   const typingDiv = document.getElementById('typing');
+  const usersList = document.getElementById('usersList');
 
-  let username = '';
-  usernameInput.addEventListener('change', () => {
-    username = usernameInput.value.trim();
+  let username = sessionStorage.getItem('username') || null;
+
+  async function updateNameList() {
+    const snapshot = await db.ref('activeUsers').once('value');
+    const takenNames = snapshot.val() || {};
+    for (let option of userSelect.options) {
+      if (takenNames[option.value]) {
+        option.disabled = true;
+      } else {
+        option.disabled = false;
+      }
+    }
+  }
+
+  async function login() {
+    username = userSelect.value;
+    if (!username || username === "-- Выберите имя --") return alert("Выберите имя");
+    const takenSnapshot = await db.ref('activeUsers/' + username).once('value');
+    if (takenSnapshot.exists()) {
+      return alert("Это имя уже занято. Выберите другое.");
+    }
+    await db.ref(`activeUsers/${username}`).set(true);
+    sessionStorage.setItem('username', username);
+    document.getElementById('auth').style.display = 'none';
+    chatSection.style.display = 'block';
+  }
+
+  if (username) {
+    document.getElementById('auth').style.display = 'none';
+    chatSection.style.display = 'block';
+    db.ref(`activeUsers/${username}`).set(true);
+  } else {
+    updateNameList();
+  }
+
+  window.addEventListener('beforeunload', () => {
+    if (username) db.ref(`activeUsers/${username}`).remove();
   });
 
   function sendMessage() {
-    if (!username) {
-      alert("Введите имя!");
-      return;
-    }
-
     const text = messageInput.value.trim();
-    if (text === '') return;
-
+    const file = fileInput.files[0];
     const now = new Date();
     const timestamp = now.toLocaleTimeString() + ' ' + now.toLocaleDateString();
 
-    db.ref('messages').push({
-      username: username,
-      text: text,
-      time: timestamp
-    });
+    if (!text && !file) return;
+
+    if (file) {
+      const storageRef = storage.ref(`files/${Date.now()}_${file.name}`);
+      storageRef.put(file).then(snapshot => {
+        snapshot.ref.getDownloadURL().then(url => {
+          const message = {
+            username,
+            text: text || file.name,
+            fileUrl: url,
+            fileName: file.name,
+            time: timestamp
+          };
+          db.ref('messages').push(message);
+        });
+      });
+    } else {
+      db.ref('messages').push({
+        username,
+        text,
+        time: timestamp
+      });
+    }
 
     messageInput.value = '';
+    fileInput.value = '';
     db.ref('typing').remove();
   }
 
-  // Получение сообщений
+  // Отправка сообщения по нажатию Enter
+  messageInput.addEventListener('keydown', (event) => {
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      db.ref('typing').remove();
+    }, 2000);
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
   db.ref('messages').on('child_added', (snapshot) => {
     const msg = snapshot.val();
     const div = document.createElement('div');
     div.className = 'message';
-    div.innerHTML = `<strong>${msg.username}:</strong> ${msg.text} <div class="meta">${msg.time}</div>`;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
+    
+    if (msg.username === username) {
+      div.classList.add('own');
+    }
+
+    let filePart = '';
+    if (msg.fileUrl) {
+      if (msg.fileName.match(/\.(jpg|png|gif|jpeg)$/i)) {
+        filePart = `<br><img src="${msg.fileUrl}" style="max-width:100px; max-height:100px; margin-top:5px;" />
+                    <br><a class="download-link" href="${msg.fileUrl}" download="${msg.fileName}">Скачать ${msg.fileName}</a>`;
+      } else {
+        filePart = `<br><a class="download-link" href="${msg.fileUrl}" download="${msg.fileName}">Скачать файл: ${msg.fileName}</a>`;
+      }
+    }
+
+    div.innerHTML = `<strong>${msg.username}:</strong> ${msg.text}${filePart}<div class="meta">${msg.time}</div>`;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (document.hidden && msg.username !== username) {
+      showNotification(`${msg.username}: ${msg.text}`);
+    }
   });
 
-  // "Печатает..."
   messageInput.addEventListener('input', () => {
     if (username) {
       db.ref('typing').set(username);
     }
   });
 
-  // Удаление "печатает" через 2 секунды неактивности
   let typingTimeout;
-  messageInput.addEventListener('keydown', () => {
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
-      db.ref('typing').remove();
-    }, 2000);
-  });
-
   db.ref('typing').on('value', (snapshot) => {
     const typingUser = snapshot.val();
     if (typingUser && typingUser !== username) {
@@ -136,6 +385,30 @@
       typingDiv.innerText = '';
     }
   });
+
+  db.ref('activeUsers').on('value', (snapshot) => {
+    const activeUsers = snapshot.val() || {};
+    usersList.innerHTML = '';
+    for (let user in activeUsers) {
+      const li = document.createElement('li');
+      li.innerText = user;
+      usersList.appendChild(li);
+    }
+    updateNameList();
+  });
+
+  function showNotification(text) {
+    if (Notification.permission === 'granted') {
+      new Notification("Новое сообщение", {
+        body: text,
+        icon: "https://cdn-icons-png.flaticon.com/512/3059/3059502.png"
+      });
+    }
+  }
+
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission();
+  }
 </script>
 
 </body>
