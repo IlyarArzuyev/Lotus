@@ -539,6 +539,24 @@
 				.call-btn:hover {
 				  background: #45a049;
 				}
+				.note-actions button {
+				    background: none;
+				    border: none;
+				    cursor: pointer;
+				    margin-left: 5px;
+				    font-size: 16px;
+				    color: #555;
+				    transition: color 0.3s;
+				}
+
+				.note-actions button:hover {
+				    color: #000;
+				}
+
+				/* Иконка копирования */
+				.copy-note {
+				    margin-right: auto; /* Размещаем слева от других кнопок */
+				}
   </style>
   <script>
     // Функция для открытия ссылки с запросом пароля
@@ -578,42 +596,42 @@
       <button class="theme-toggle" id="themeToggle"></button>
     </header>
     
-   <!-- Секция: Дашборд -->
+    <!-- Секция: Дашборд -->
    <section id="dashboard" class="section active">
-     <p align="center">Добро пожаловать в Dashboard. Здесь отображается ключевая информация компании.</p>
-     <br><br>
-     <div class="stats">
-       <a class="card" href="Call_center.html">
-         ☎️ <br><br><strong>МОП'ам</strong><br>Информация
-       </a>
-       <a class="card" href="specialist.html">
-         👩🏻‍💼👨🏻‍💼 <br><br><strong>Экспертам</strong><br>Информация
-       </a>
+        <p align="center">Добро пожаловать в Dashboard. Здесь отображается ключевая информация компании.</p>
+        <br><br>
+        <div class="stats">
+          <a class="card" href="Call_center.html">
+            ☎️ <br><br><strong>МОП'ам</strong><br>Информация
+          </a>
+          <a class="card" href="specialist.html">
+            👩🏻‍💼👨🏻‍💼 <br><br><strong>Экспертам</strong><br>Информация
+          </a>
        
       
-       <br> 
-     </div>
+          <br> 
+        </div>
 
-     <div class="stats">
-         <a class="card" href="pdf.html">
-           📱➕➖ <br><br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
-         </a>
+        <div class="stats">
+            <a class="card" href="pdf.html">
+              📱➕➖ <br><br><strong>Калькулятор</strong><br>Ипотечный (PDF-док)
+            </a>
       
-      <a class="card" href="otbasy.html">
-        🏠➕➖ <br><br><strong>Калькулятор</strong><br>Отбасы
-      </a>
-      </div>
+         <a class="card" href="otbasy.html">
+           🏠➕➖ <br><br><strong>Калькулятор</strong><br>Отбасы
+         </a>
+         </div>
    
-   <div class="stats">
-          <a class="card" href="https://expertcredit.amocrm.ru/todo/line/" target="_blank">
-            💻 <br><br><strong>AMOcrm</strong><br>Открыть
-          </a>
-          <a class="card" href="https://my.binotel.kz" target="_blank">
-            🎧 <br><br><strong>Binotel</strong><br>Открыть
-          </a>
-     </div>
-     <br><br>
-   </section>
+      <div class="stats">
+             <a class="card" href="https://expertcredit.amocrm.ru/todo/line/" target="_blank">
+               💻 <br><br><strong>AMOcrm</strong><br>Открыть
+             </a>
+             <a class="card" href="https://my.binotel.kz" target="_blank">
+               🎧 <br><br><strong>Binotel</strong><br>Открыть
+             </a>
+        </div>
+        <br><br>
+      </section>
     
     <!-- Секция: Файлы (Файловый менеджер) -->
     <section id="files" class="section">
@@ -637,6 +655,7 @@
             <th>Отдел</th>
             <th>Сотовый номер</th>
 		    <th>Действия</th> <!-- Новая колонка -->
+		    <th>Почта</th> <!-- Новая колонка -->
           </tr>
         </thead>
         <tbody>
@@ -828,17 +847,17 @@
     /* Секция: Сотрудники */
     /*******************/
     const employeesData = [
-      { id: 1, fullName: 'Канат Дарибекович', position: 'Директор', department: 'Филиал', mobile: '+ 7 707 671 11 88' },
-      { id: 2, fullName: 'Канат Имангалиулы', position: 'Главный эксперт', department: 'Филиал', mobile: '+ 7 702 270 07 13' },
-      { id: 3, fullName: 'Жадыра А', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 707 521 31 09' },
-      { id: 3, fullName: 'Жадыра Б', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 982 82 89' },
-      { id: 4, fullName: 'Салтанат Нурбековна', position: 'РОП', department: 'Филиал', mobile: '+ 7 707 558 87 97' },
-      { id: 5, fullName: 'Диана', position: 'SMM', department: 'Филиал', mobile: '+ 7 708 164 15 98' },
-      { id: 6, fullName: 'Бауыржан К.', position: 'МОП', department: 'Филиал', mobile: '+ 7 705 799 98 53' },
-      { id: 7, fullName: 'Тимур А.', position: 'МОП', department: 'Филиал', mobile: '+ 7 700 258 29 32' },
-      { id: 8, fullName: 'Катерина.', position: 'SMM', department: 'Филиал', mobile: '+ 7 707 321 86 70' },
-      { id: 9, fullName: 'Евгений Шот.', position: '-', department: 'Филиал', mobile: '+ 7 707 133 99 06' },
-      { id: 10, fullName: 'Ильяр Даниярович', position: 'Тех. отдел', department: 'Филиал', mobile: '+ 7 708 217 13 13' }
+      { id: 1, fullName: 'Канат Дарибекович', position: 'Директор', department: 'Филиал', mobile: '+ 7 707 671 11 88', email: 'kanatgold91@gmail.com' },
+      { id: 2, fullName: 'Канат Имангалиулы', position: 'Главный эксперт', department: 'Филиал', mobile: '+ 7 702 270 07 13', email: 'imangaliulikanat@gmail.com' },
+      { id: 3, fullName: 'Жадыра А', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 707 521 31 09', email: 'jadok09@gmail.com' },
+      { id: 3, fullName: 'Жадыра Б', position: 'Эксперт', department: 'Филиал', mobile: '+ 7 777 982 82 89', email: 'zadyraakadiloava@gmail.com' },
+      { id: 4, fullName: 'Салтанат Нурбековна', position: 'РОП', department: 'Филиал', mobile: '+ 7 707 558 87 97', email: 'nurbeksaltanat21@gmail.com' },
+      { id: 5, fullName: 'Диана', position: 'SMM', department: 'Филиал', mobile: '+ 7 708 164 15 98', email: '' },
+      { id: 6, fullName: 'Бауыржан К.', position: 'МОП', department: 'Филиал', mobile: '+ 7 705 799 98 53', email: 'work.bauyrzhan@gmail.com' },
+      { id: 7, fullName: 'Тимур А.', position: 'МОП', department: 'Филиал', mobile: '+ 7 700 258 29 32', email: 'tima.askarbekov05@gmail.com' },
+      { id: 8, fullName: 'Катерина.', position: 'SMM', department: 'Филиал', mobile: '+ 7 707 321 86 70', email: '' },
+      { id: 9, fullName: 'Евгений Шот.', position: '-', department: 'Филиал', mobile: '+ 7 707 133 99 06', email: '' },
+      { id: 10, fullName: 'Ильяр Даниярович', position: 'Тех. отдел', department: 'Филиал', mobile: '+ 7 708 217 13 13', email: 'iljarz40@gmail.com' }
     ];
     const employeesTableBody = document.querySelector('#employeesTable tbody');
 	function renderEmployees(filter = '') {
@@ -862,6 +881,9 @@
 	          <button class="call-btn" onclick="generatePhoneQR('${cleanPhone}')">
 	            📞 Позвонить
 	          </button>
+ </td>
+        <td>${emp.email || ''}</td> <!-- Здесь можно заполнить почту позже -->
+      </tr>
 	        </td>
 	      </tr>
 	    `;
@@ -1092,10 +1114,11 @@
 	    card.dataset.id = note.id;
     
 	    card.innerHTML = `
-	      <div class="note-actions">
-	        <button class="edit-note" title="Редактировать">✏️</button>
-	        <button class="delete-note" title="Удалить">❌</button>
-	      </div>
+<div class="note-actions">
+    <button class="copy-note" title="Копировать">📋</button>
+    <button class="edit-note" title="Редактировать">✏️</button>
+    <button class="delete-note" title="Удалить">❌</button>
+</div>
 	      <div class="note-text">${note.text}</div>
 	    `;
 	    notesContainer.appendChild(card);
@@ -1122,10 +1145,11 @@
 
 	// Делегирование событий для редактирования и удаления заметок
 	document.getElementById('notesContainer').addEventListener('click', function(e) {
-	  const card = e.target.closest('.note-card');
-	  if (!card) return;
-	  const noteId = parseInt(card.dataset.id);
-	  let notes = loadNotes();
+	    const card = e.target.closest('.note-card');
+	    if (!card) return;
+	    const noteId = parseInt(card.dataset.id);
+	    let notes = loadNotes();
+
   
 	  // Удаление заметки
 	  if (e.target.classList.contains('delete-note')) {
@@ -1144,6 +1168,13 @@
 	      renderNotes();
 	    }
 	  }
+	  if (e.target.classList.contains('copy-note')) {
+	         const text = card.querySelector('.note-text').textContent;
+	         navigator.clipboard.writeText(text)
+	             .then(() => alert('Текст скопирован!'))
+	             .catch(err => console.error('Ошибка копирования:', err));
+	         return;
+	     }
 	});
 
 	// При загрузке страницы отрисовываем заметки
