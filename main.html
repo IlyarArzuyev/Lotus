@@ -539,6 +539,24 @@
 				.call-btn:hover {
 				  background: #45a049;
 				}
+				.note-actions button {
+				    background: none;
+				    border: none;
+				    cursor: pointer;
+				    margin-left: 5px;
+				    font-size: 16px;
+				    color: #555;
+				    transition: color 0.3s;
+				}
+
+				.note-actions button:hover {
+				    color: #000;
+				}
+
+				/* Иконка копирования */
+				.copy-note {
+				    margin-right: auto; /* Размещаем слева от других кнопок */
+				}
   </style>
   <script>
     // Функция для открытия ссылки с запросом пароля
@@ -1105,10 +1123,11 @@
 	    card.dataset.id = note.id;
     
 	    card.innerHTML = `
-	      <div class="note-actions">
-	        <button class="edit-note" title="Редактировать">✏️</button>
-	        <button class="delete-note" title="Удалить">❌</button>
-	      </div>
+<div class="note-actions">
+    <button class="copy-note" title="Копировать">📋</button>
+    <button class="edit-note" title="Редактировать">✏️</button>
+    <button class="delete-note" title="Удалить">❌</button>
+</div>
 	      <div class="note-text">${note.text}</div>
 	    `;
 	    notesContainer.appendChild(card);
@@ -1135,10 +1154,11 @@
 
 	// Делегирование событий для редактирования и удаления заметок
 	document.getElementById('notesContainer').addEventListener('click', function(e) {
-	  const card = e.target.closest('.note-card');
-	  if (!card) return;
-	  const noteId = parseInt(card.dataset.id);
-	  let notes = loadNotes();
+	    const card = e.target.closest('.note-card');
+	    if (!card) return;
+	    const noteId = parseInt(card.dataset.id);
+	    let notes = loadNotes();
+
   
 	  // Удаление заметки
 	  if (e.target.classList.contains('delete-note')) {
@@ -1157,6 +1177,13 @@
 	      renderNotes();
 	    }
 	  }
+	  if (e.target.classList.contains('copy-note')) {
+	         const text = card.querySelector('.note-text').textContent;
+	         navigator.clipboard.writeText(text)
+	             .then(() => alert('Текст скопирован!'))
+	             .catch(err => console.error('Ошибка копирования:', err));
+	         return;
+	     }
 	});
 
 	// При загрузке страницы отрисовываем заметки
